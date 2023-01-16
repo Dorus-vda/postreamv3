@@ -1,25 +1,39 @@
 import 'dart:convert';
 
-import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:postreamv3/models/movie.dart';
 import 'package:postreamv3/widgets/moviesWidget.dart';
 import 'package:postreamv3/widgets/video_items.dart';
-import 'package:video_player/video_player.dart';
 
 void main() {
   runApp(const MovieApp());
 }
 
-class MovieApp extends StatefulWidget {
+class MovieApp extends StatelessWidget {
   const MovieApp({super.key});
 
   @override
-  State<MovieApp> createState() => _MovieAppState();
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'PoStreamv3',
+      theme: ThemeData(
+        primarySwatch: Colors.lightGreen,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      home: MyHomePage()
+    );
+  }
 }
 
-class _MovieAppState extends State<MovieApp> {
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key});
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
   List<Movie> _movies = <Movie>[];
 
   @override
