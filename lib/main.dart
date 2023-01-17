@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:postreamv3/models/movie.dart';
@@ -10,30 +9,14 @@ void main() {
   runApp(const MovieApp());
 }
 
-class MovieApp extends StatelessWidget {
+class MovieApp extends StatefulWidget {
   const MovieApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'PoStreamv3',
-      theme: ThemeData(
-        primarySwatch: Colors.lightGreen,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: MyHomePage()
-    );
-  }
+  State<MovieApp> createState() => _MovieAppState();
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
+class _MovieAppState extends State<MovieApp> {
   List<Movie> _movies = <Movie>[];
 
   @override
@@ -52,7 +35,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<List<Movie>> _fetchMovies() async {
     final response =
-        await http.get("https://api.consumet.org/anime/zoro/naruto");
+        await http.get("https://api.consumet.org/movies/flixhq/attack on titan");
 
     if (response.statusCode == 200) {
       final result = jsonDecode(response.body);

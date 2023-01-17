@@ -17,13 +17,22 @@ class VideoPlayer extends StatefulWidget {
 
 class _VideoPlayerState extends State<VideoPlayer> {
   BetterPlayerController? betterPlayerController;
+  String link = '';
 
   @override
   void initState() {
-    betterPlayerController = BetterPlayerController(
-      const BetterPlayerConfiguration(aspectRatio: 16 / 9),
+    super.initState();
+    getLink();
+  }
+
+  Future getLink() async {
+    String templink = await getEpisodeId();
+    setState(() {
+      link = templink;
+      betterPlayerController = BetterPlayerController(
+      const BetterPlayerConfiguration(autoPlay: true, autoDetectFullscreenAspectRatio: true, fullScreenByDefault: true),
       betterPlayerDataSource: BetterPlayerDataSource.network(
-        'https://wwwx11.gofcdn.com/videos/hls/c6TDKi-ep6awviV-bHKAdg/1673927019/71300/a1838868c6ce2b8f60f11d90af7035e8/ep.1.1657688511.1080.m3u8',
+        link,
         notificationConfiguration: BetterPlayerNotificationConfiguration(
           showNotification: true,
           title: widget.title,
@@ -39,23 +48,52 @@ class _VideoPlayerState extends State<VideoPlayer> {
         setState(() {});
       }
     });
-    super.initState();
+    });
+  }
+
+  Future<String> getEpisodeId() async {
+    final response = await http.get(Uri.parse(
+        'https://api.consumet.org/movies/flixhq/info?id=${widget.id}'));
+    if (response.statusCode == 200) {
+      Map<String, dynamic> body = json.decode(response.body);
+      List<dynamic> episodes = body['episodes'];
+      Map<String, dynamic> singleEpisode = episodes[0];
+      //print(singleEpisode['id']);
+      String episodeId = singleEpisode['id'];
+      print(episodeId);
+      final response2 = await http.get(Uri.parse(
+          'https://api.consumet.org/movies/flixhq/watch?mediaId=${widget.id}&episodeId=$episodeId'));
+      if (response.statusCode == 200) {
+        Map<String, dynamic> body2 = json.decode(response2.body);
+        List<dynamic> sources = body2['sources'];
+        Map<String, dynamic> streaminglink = sources[0];
+        print(streaminglink['url']);
+        return streaminglink['url'];
+      } else {
+        throw Exception('Kan Films niet laden!');
+      }
+    } else {
+      throw Exception('Kan Films niet laden!');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Video Player'),
-      ),
-      body: AspectRatio(
-        aspectRatio: 16 / 9,
-        child: BetterPlayer(controller: betterPlayerController!),
-      ),
-    );
+    // ignore: dead_code
+    if (link != '') {
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text('Video Player'),
+        ),
+        body: Center(child: BetterPlayer(controller: betterPlayerController!))
+        );
+    } else {
+        return Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+        );
+    }
   }
 }
-
 
 /*late String id = widget.id;
   String link = "";
