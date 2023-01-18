@@ -18,12 +18,12 @@ class MovieApp extends StatefulWidget {
 
 class _MovieAppState extends State<MovieApp> {
   List<Movie> _movies = <Movie>[];
+  String search_title = "Naruto";
 
   @override
   void initState() {
     super.initState();
     _populateMovies();
-    print(_movies);
   }
 
   void _populateMovies() async {
@@ -35,7 +35,7 @@ class _MovieAppState extends State<MovieApp> {
 
   Future<List<Movie>> _fetchMovies() async {
     final response =
-        await http.get("https://api.consumet.org/movies/flixhq/attack on titan");
+        await http.get("https://api.consumet.org/movies/flixhq/$search_title");
 
     if (response.statusCode == 200) {
       final result = jsonDecode(response.body);
@@ -46,6 +46,8 @@ class _MovieAppState extends State<MovieApp> {
     }
   }
 
+  TextEditingController searchcontroller = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -53,8 +55,21 @@ class _MovieAppState extends State<MovieApp> {
         title: 'Postream',
         home: Scaffold(
           appBar: AppBar(
-            title: Text('Search movie'),
-            actions: [IconButton(icon: Icon(Icons.search), onPressed: () {})],
+            title: TextField(
+              controller: searchcontroller,
+              decoration: InputDecoration(
+                  hintText: 'Enter a title',
+                  hintStyle: TextStyle(color: Colors.white)),
+              style: TextStyle(color: Colors.white),
+            ),
+            actions: [
+              IconButton(
+                  icon: Icon(Icons.search),
+                  onPressed: () {
+                    search_title = searchcontroller.text;
+                    _populateMovies();
+                  })
+            ],
           ),
           body: MoviesWidget(movies: _movies),
         ));

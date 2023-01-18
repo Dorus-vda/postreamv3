@@ -18,11 +18,13 @@ class VideoPlayer extends StatefulWidget {
 class _VideoPlayerState extends State<VideoPlayer> {
   BetterPlayerController? betterPlayerController;
   String link = '';
+  late double aspect =
+      betterPlayerController!.videoPlayerController!.value.aspectRatio;
 
   @override
   void initState() {
-    super.initState();
     getLink();
+    super.initState();
   }
 
   Future getLink() async {
@@ -30,24 +32,19 @@ class _VideoPlayerState extends State<VideoPlayer> {
     setState(() {
       link = templink;
       betterPlayerController = BetterPlayerController(
-      const BetterPlayerConfiguration(autoPlay: true, autoDetectFullscreenAspectRatio: true, fullScreenByDefault: true),
-      betterPlayerDataSource: BetterPlayerDataSource.network(
-        link,
-        notificationConfiguration: BetterPlayerNotificationConfiguration(
-          showNotification: true,
-          title: widget.title,
-          imageUrl: widget.image,
+        const BetterPlayerConfiguration(
+            autoPlay: true,
+            fullScreenByDefault: true),
+        betterPlayerDataSource: BetterPlayerDataSource.network(
+          link,
+          videoFormat: BetterPlayerVideoFormat.hls,
+          notificationConfiguration: BetterPlayerNotificationConfiguration(
+            showNotification: true,
+            title: widget.title,
+            imageUrl: widget.image,
+          ),
         ),
-      ),
-    );
-
-    betterPlayerController?.addEventsListener((BetterPlayerEvent event) {
-      if (event.betterPlayerEventType == BetterPlayerEventType.initialized) {
-        betterPlayerController?.setOverriddenAspectRatio(
-            betterPlayerController!.videoPlayerController!.value.aspectRatio);
-        setState(() {});
-      }
-    });
+      );
     });
   }
 
@@ -79,21 +76,30 @@ class _VideoPlayerState extends State<VideoPlayer> {
 
   @override
   Widget build(BuildContext context) {
-    // ignore: dead_code
     if (link != '') {
-      return Scaffold(
-        appBar: AppBar(
-          title: const Text('Video Player'),
-        ),
-        body: Center(child: BetterPlayer(controller: betterPlayerController!))
-        );
+      return MaterialApp(
+        home: Scaffold(
+            appBar: AppBar(
+              title: const Text('Video Player'),
+            ),
+            body: Center(
+              child: Container(
+                  child: SizedBox(
+                    child: AspectRatio(
+                        aspectRatio: betterPlayerController!
+                            .videoPlayerController!.value.aspectRatio,
+                        child: BetterPlayer(controller: betterPlayerController!)),
+                  )),
+            )),
+      );
     } else {
-        return Scaffold(
-            body: Center(child: CircularProgressIndicator()),
-        );
+      return Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
     }
   }
 }
+
 
 /*late String id = widget.id;
   String link = "";
