@@ -36,6 +36,7 @@ class _MovieAppState extends State<MovieApp> {
   Future<List<Movie>> _fetchMovies() async {
     final response =
         await http.get("https://api.consumet.org/movies/flixhq/$search_title");
+        //await http.get("http://api.consumet.org/anime/gogoanime/$search_title");
 
     if (response.statusCode == 200) {
       final result = jsonDecode(response.body);
@@ -57,10 +58,10 @@ class _MovieAppState extends State<MovieApp> {
           appBar: AppBar(
             title: TextField(
               controller: searchcontroller,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                   hintText: 'Enter a title',
                   hintStyle: TextStyle(color: Colors.white)),
-              style: TextStyle(color: Colors.white),
+              style: const TextStyle(color: Colors.white),
             ),
             actions: [
               IconButton(

@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'package:better_player/better_player.dart';
+import 'package:video_player/video_player.dart';
+import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:postreamv3/widgets/video_items.dart';
@@ -17,9 +19,10 @@ class VideoPlayer extends StatefulWidget {
 
 class _VideoPlayerState extends State<VideoPlayer> {
   BetterPlayerController? betterPlayerController;
+  VideoPlayerController? _videoPlayerController;
+  ChewieController? _chewieController;
   String link = '';
-  late double aspect =
-      betterPlayerController!.videoPlayerController!.value.aspectRatio;
+  String referer = '';
 
   @override
   void initState() {
@@ -31,20 +34,14 @@ class _VideoPlayerState extends State<VideoPlayer> {
     String templink = await getEpisodeId();
     setState(() {
       link = templink;
-      betterPlayerController = BetterPlayerController(
-        const BetterPlayerConfiguration(
-            autoPlay: true,
-            fullScreenByDefault: true),
-        betterPlayerDataSource: BetterPlayerDataSource.network(
-          link,
-          videoFormat: BetterPlayerVideoFormat.hls,
-          notificationConfiguration: BetterPlayerNotificationConfiguration(
-            showNotification: true,
-            title: widget.title,
-            imageUrl: widget.image,
-          ),
-        ),
-      );
+
+      _videoPlayerController = VideoPlayerController.network(link);
+
+      _chewieController = ChewieController(
+          videoPlayerController: _videoPlayerController!,
+          autoPlay: true,
+          allowFullScreen: true,
+          fullScreenByDefault: true);
     });
   }
 
@@ -64,6 +61,9 @@ class _VideoPlayerState extends State<VideoPlayer> {
         Map<String, dynamic> body2 = json.decode(response2.body);
         List<dynamic> sources = body2['sources'];
         Map<String, dynamic> streaminglink = sources[0];
+        //Map<String, dynamic> header = body2['headers'];
+        // print(header['Referer']);
+        //referer = header['Referer'];
         print(streaminglink['url']);
         return streaminglink['url'];
       } else {
@@ -78,20 +78,12 @@ class _VideoPlayerState extends State<VideoPlayer> {
   Widget build(BuildContext context) {
     if (link != '') {
       return MaterialApp(
-        home: Scaffold(
-            appBar: AppBar(
-              title: const Text('Video Player'),
-            ),
-            body: Center(
-              child: Container(
-                  child: SizedBox(
-                    child: AspectRatio(
-                        aspectRatio: betterPlayerController!
-                            .videoPlayerController!.value.aspectRatio,
-                        child: BetterPlayer(controller: betterPlayerController!)),
-                  )),
-            )),
-      );
+          home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Video Player'),
+        ),
+        body: Center(child: Chewie(controller: _chewieController!)),
+      ));
     } else {
       return Scaffold(
         body: Center(child: CircularProgressIndicator()),
