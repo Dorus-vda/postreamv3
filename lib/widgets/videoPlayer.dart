@@ -5,13 +5,13 @@ import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:postreamv3/widgets/video_items.dart';
+import 'package:postreamv3/sources/flixhq.dart';
 
 class VideoPlayer extends StatefulWidget {
   const VideoPlayer(
-      {super.key, required this.id, required this.image, required this.title});
-  final String id;
-  final String image;
-  final String title;
+      {super.key, required this.episodeId, required this.movieId});
+  final String episodeId;
+  final String movieId;
 
   @override
   State<VideoPlayer> createState() => _VideoPlayerState();
@@ -31,7 +31,7 @@ class _VideoPlayerState extends State<VideoPlayer> {
   }
 
   Future getLink() async {
-    String templink = await getEpisodeId();
+    String templink = await flixhq(id: widget.episodeId, movieId: widget.movieId).getEpisodeId();
     setState(() {
       link = templink;
 
@@ -43,35 +43,6 @@ class _VideoPlayerState extends State<VideoPlayer> {
           allowFullScreen: true,
           fullScreenByDefault: true);
     });
-  }
-
-  Future<String> getEpisodeId() async {
-    final response = await http.get(Uri.parse(
-        'https://api.consumet.org/movies/flixhq/info?id=${widget.id}'));
-    if (response.statusCode == 200) {
-      Map<String, dynamic> body = json.decode(response.body);
-      List<dynamic> episodes = body['episodes'];
-      Map<String, dynamic> singleEpisode = episodes[0];
-      //print(singleEpisode['id']);
-      String episodeId = singleEpisode['id'];
-      print(episodeId);
-      final response2 = await http.get(Uri.parse(
-          'https://api.consumet.org/movies/flixhq/watch?mediaId=${widget.id}&episodeId=$episodeId'));
-      if (response.statusCode == 200) {
-        Map<String, dynamic> body2 = json.decode(response2.body);
-        List<dynamic> sources = body2['sources'];
-        Map<String, dynamic> streaminglink = sources[0];
-        //Map<String, dynamic> header = body2['headers'];
-        // print(header['Referer']);
-        //referer = header['Referer'];
-        print(streaminglink['url']);
-        return streaminglink['url'];
-      } else {
-        throw Exception('Kan Films niet laden!');
-      }
-    } else {
-      throw Exception('Kan Films niet laden!');
-    }
   }
 
   @override

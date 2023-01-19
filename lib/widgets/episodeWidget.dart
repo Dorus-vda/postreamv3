@@ -1,21 +1,22 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:postreamv3/episodePage.dart';
+import 'package:postreamv3/models/episode.dart';
 import '../widgets/videoPlayer.dart' as videoPlayer;
 import '../models/movie.dart';
 
-class MoviesWidget extends StatelessWidget {
-  final List<Movie> movies;
+class EpisodesWidget extends StatelessWidget {
+  final List<Episode> episodes;
+  final String movieId;
 
-  MoviesWidget({required this.movies});
+  EpisodesWidget({required this.episodes, required this.movieId});
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: movies.length,
+      itemCount: episodes.length,
       itemBuilder: (context, index) {
-        final movie = movies[index];
+        final episode = episodes[index];
 
         return GestureDetector(
           child: ListTile(
@@ -23,25 +24,17 @@ class MoviesWidget extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => EpisodePage(id: movie.id)),
+                    builder: (context) => videoPlayer.VideoPlayer(episodeId: episode.id, movieId: movieId,)),
               );
             },
             title: Row(children: [
               SizedBox(
-                width: 200,
+                width: 300,
+                height: 100,
                 child: ClipRRect(
-                    child: Image.network(movie.image),
+                    child: Text(episode.title),
                     borderRadius: BorderRadius.circular(15)),
               ),
-              Flexible(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [Text(movie.title)],
-                  ),
-                ),
-              )
             ]),
           ),
         );
