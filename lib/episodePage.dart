@@ -7,7 +7,6 @@ import 'package:postreamv3/widgets/moviesWidget.dart';
 import 'package:postreamv3/widgets/episodeWidget.dart';
 import 'package:postreamv3/widgets/video_items.dart';
 
-
 class EpisodePage extends StatefulWidget {
   const EpisodePage({super.key, required this.id});
   final String id;
@@ -18,6 +17,7 @@ class EpisodePage extends StatefulWidget {
 
 class _EpisodePageState extends State<EpisodePage> {
   List<Episode> _episodes = <Episode>[];
+  String cover = '';
 
   @override
   void initState() {
@@ -33,12 +33,13 @@ class _EpisodePageState extends State<EpisodePage> {
   }
 
   Future<List<Episode>> _fetchEpisodes() async {
-    final response =
-        await http.get("https://api.consumet.org/movies/flixhq/info?id=${widget.id}");
-        //await http.get("http://api.consumet.org/anime/gogoanime/$search_title");
+    final response = await http
+      .get("https://api.consumet.org/movies/flixhq/info?id=${widget.id}");
+    //await http.get("http://api.consumet.org/anime/gogoanime/$search_title");
 
     if (response.statusCode == 200) {
       final result = jsonDecode(response.body);
+      cover = result["cover"];
       Iterable list = result["episodes"];
       return list.map((episode) => Episode.fromJson(episode)).toList();
     } else {
@@ -50,12 +51,20 @@ class _EpisodePageState extends State<EpisodePage> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Postream',
-        home: Scaffold(
-          body: EpisodesWidget(episodes: _episodes, movieId: widget.id,),
-        ));
+    if (cover != '') {
+      return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Postream',
+          home: Scaffold(
+            appBar: AppBar(title: Text("Episodes"),),
+            body: EpisodesWidget(
+              cover: cover,
+              episodes: _episodes,
+              movieId: widget.id,
+            ),
+          ));
+    } else {
+      return Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
   }
-} 
-
+}

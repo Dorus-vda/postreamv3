@@ -39,9 +39,9 @@ class _VideoPlayerState extends State<VideoPlayer> {
 
       _chewieController = ChewieController(
           videoPlayerController: _videoPlayerController!,
-          autoPlay: true,
+          fullScreenByDefault: true,
           allowFullScreen: true,
-          fullScreenByDefault: true);
+          autoInitialize: true);
     });
   }
 
@@ -49,11 +49,8 @@ class _VideoPlayerState extends State<VideoPlayer> {
   Widget build(BuildContext context) {
     if (link != '') {
       return MaterialApp(
-          home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Video Player'),
-        ),
-        body: Center(child: Chewie(controller: _chewieController!)),
+        home: Scaffold(backgroundColor: Colors.black,
+          body: Center(child: Chewie(controller: _chewieController!)),
       ));
     } else {
       return Scaffold(
@@ -61,7 +58,16 @@ class _VideoPlayerState extends State<VideoPlayer> {
       );
     }
   }
+
+  @override
+  void dispose() {
+    _videoPlayerController?.dispose();
+    _chewieController?.dispose();
+    super.dispose();
+  }
 }
+
+
 
 
 /*late String id = widget.id;

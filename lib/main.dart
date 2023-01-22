@@ -1,11 +1,18 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter/services.dart';
 import 'package:postreamv3/models/movie.dart';
 import 'package:postreamv3/widgets/moviesWidget.dart';
 import 'package:postreamv3/widgets/video_items.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  // Step 3
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
   runApp(const MovieApp());
 }
 
@@ -35,8 +42,8 @@ class _MovieAppState extends State<MovieApp> {
 
   Future<List<Movie>> _fetchMovies() async {
     final response =
-        await http.get("https://api.consumet.org/movies/flixhq/$search_title");
-        //await http.get("http://api.consumet.org/anime/gogoanime/$search_title");
+      await http.get("https://api.consumet.org/movies/flixhq/$search_title");
+      //await http.get(Uri.encodeFull("http://api.consumet.org/anime/gogoanime/$search_title"));
 
     if (response.statusCode == 200) {
       final result = jsonDecode(response.body);
@@ -51,6 +58,10 @@ class _MovieAppState extends State<MovieApp> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Postream',
