@@ -36,7 +36,7 @@ class EpisodesWidget extends StatelessWidget {
                 child: Container(
                   decoration: BoxDecoration(
                       image: DecorationImage(
-                          image: NetworkImage(cover),
+                          image: NetworkImage(episode.image),
                           fit: BoxFit.fitWidth,
                           colorFilter: const ColorFilter.mode(
                               Colors.grey, BlendMode.darken))),

@@ -5,17 +5,23 @@ import 'package:postreamv3/episodePage.dart';
 import '../widgets/videoPlayer.dart' as videoPlayer;
 import '../models/movie.dart';
 
-class MoviesWidget extends StatelessWidget {
+class MoviesWidget extends StatefulWidget {
   final List<Movie> movies;
 
   MoviesWidget({required this.movies});
 
   @override
+  State<MoviesWidget> createState() => _MoviesWidgetState();
+}
+
+class _MoviesWidgetState extends State<MoviesWidget> {
+
+  @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: movies.length,
+      itemCount: widget.movies.length,
       itemBuilder: (context, index) {
-        final movie = movies[index];
+        final movie = widget.movies[index];
 
         return GestureDetector(
           child: ListTile(

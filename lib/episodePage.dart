@@ -34,7 +34,7 @@ class _EpisodePageState extends State<EpisodePage> {
 
   Future<List<Episode>> _fetchEpisodes() async {
     final response = await http
-      .get("https://api.consumet.org/movies/flixhq/info?id=${widget.id}");
+      .get("https://api.consumet.org/meta/anilist/info/${widget.id}");
     //await http.get("http://api.consumet.org/anime/gogoanime/$search_title");
 
     if (response.statusCode == 200) {
@@ -64,7 +64,7 @@ class _EpisodePageState extends State<EpisodePage> {
             ),
           ));
     } else {
-      return Scaffold(body: Center(child: CircularProgressIndicator()));
+      return Scaffold(body: Center(child: CircularProgressIndicator.adaptive(valueColor: AlwaysStoppedAnimation<Color>(Colors.black), backgroundColor: Colors.white)));
     }
   }
 }

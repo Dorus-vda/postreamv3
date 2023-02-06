@@ -4,10 +4,10 @@ class Movie {
   String title;
   //String type;
 
-  Movie({required this.id, required this.title, required this.image});
+  Movie({required this.id, required this.image, required this.title});
 
   factory Movie.fromJson(Map<String, dynamic> json) {
-    return Movie(id: json["id"], image: json["image"], title: json["title"]);
+    return Movie(id: json["id"], image: json["image"], title: json["title"]["romaji"]);
     //type: json["type"]);
   }
 }
