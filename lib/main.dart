@@ -1,12 +1,18 @@
 import 'dart:convert';
+import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
 import 'package:postreamv3/models/movie.dart';
+import 'package:postreamv3/widgets/animeHomePage.dart';
 import 'package:postreamv3/widgets/moviesWidget.dart';
+import 'package:postreamv3/widgets/videoPlayer.dart';
 import 'package:postreamv3/widgets/video_items.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
+import 'widgets/movieHomePage.dart';
+
+bool showNavigationBar = true;
 void main() {
   runApp(const MovieApp());
 }
@@ -19,64 +25,51 @@ class MovieApp extends StatefulWidget {
 }
 
 class _MovieAppState extends State<MovieApp> {
-  List<Movie> _movies = <Movie>[];
-  String search_title = "Naruto";
+  int _selectedIndex = 0;
+  TextEditingController searchcontroller = TextEditingController();
+  int _selectedPage = 0;
+  List<Widget> pageList = <Widget>[];
 
   @override
   void initState() {
+    pageList.add(animeHomePage());
+    pageList.add(movieHomePage());
     super.initState();
-    _populateMovies();
   }
-
-  void _populateMovies() async {
-    final movies = await _fetchMovies();
-    setState(() {
-      _movies = movies;
-    });
-  }
-
-  Future<List<Movie>> _fetchMovies() async {
-    final response =
-      //await http.get("https://api.consumet.org/movies/flixhq/$search_title");
-      await http.get(Uri.encodeFull("http://api.consumet.org/meta/anilist/$search_title"));
-
-    if (response.statusCode == 200) {
-      final result = jsonDecode(response.body);
-      Iterable list = result["results"];
-      return list.map((movie) => Movie.fromJson(movie)).toList();
-    } else {
-      throw Exception("Kan de films niet laden!");
-    }
-  }
-
-  TextEditingController searchcontroller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        theme: ThemeData(primarySwatch: Colors.grey),
-        debugShowCheckedModeBanner: false,
-        title: 'Postream',
-        home: Scaffold(
-          appBar: AppBar(
-            title: TextField(
-              controller: searchcontroller,
-              decoration: const InputDecoration(
-                  hintText: 'Enter a title',
-                  hintStyle: TextStyle(color: Colors.white)),
-              style: const TextStyle(color: Colors.white),
-            ),
-            actions: [
-              IconButton(
-                  icon: Icon(Icons.search),
-                  onPressed: () {
-                    search_title = searchcontroller.text;
-                    _populateMovies();
-                  })
-            ],
-          ),
-          body: MoviesWidget(movies: _movies),
-        ));
+      theme: ThemeData(primarySwatch: Colors.grey),
+      debugShowCheckedModeBanner: false,
+      title: 'Postream',
+      home: Scaffold(
+        extendBody: true,
+        body: IndexedStack(
+          index: _selectedIndex,
+          children: pageList,
+        ),
+        bottomNavigationBar: showNavigationBar == true ? BottomNavyBar(
+          curve: Curves.fastLinearToSlowEaseIn,
+          selectedIndex: _selectedIndex,
+          onItemSelected: (clickedIndex) {
+            setState(() {
+              _selectedIndex = clickedIndex;
+            });
+          },
+          items: [
+            BottomNavyBarItem(
+                title: Text("Anime"),
+                icon: Icon(Icons.home_filled),
+                activeColor: Colors.red),
+            BottomNavyBarItem(
+                title: Text("TV"),
+                icon: Icon(Icons.tv),
+                activeColor: Colors.blue)
+          ],
+        ): null,
+      ),
+    );
   }
 } 
 

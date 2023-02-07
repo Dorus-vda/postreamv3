@@ -2,26 +2,26 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:postreamv3/episodePage.dart';
-import 'package:postreamv3/main.dart';
+import 'package:postreamv3/models/anime.dart';
 import '../models/movie.dart';
 
-class MoviesWidget extends StatefulWidget {
-  final List<Movie> movies;
+class animeWidget extends StatefulWidget {
+  final List<Anime> animes;
 
-  MoviesWidget({required this.movies});
+  animeWidget({required this.animes});
 
   @override
-  State<MoviesWidget> createState() => _MoviesWidgetState();
+  State<animeWidget> createState() => _animeWidgetState();
 }
 
-class _MoviesWidgetState extends State<MoviesWidget> {
+class _animeWidgetState extends State<animeWidget> {
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: widget.movies.length,
+      itemCount: widget.animes.length,
       itemBuilder: (context, index) {
-        final movie = widget.movies[index];
+        final anime = widget.animes[index];
 
         return GestureDetector(
           child: ListTile(
@@ -29,14 +29,14 @@ class _MoviesWidgetState extends State<MoviesWidget> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => EpisodePage(id: movie.id)),
+                    builder: (context) => EpisodePage(id: anime.id)),
               );
             },
             title: Row(children: [
               SizedBox(
                 width: 200,
                 child: ClipRRect(
-                    child: Image.network(movie.image),
+                    child: Image.network(anime.image),
                     borderRadius: BorderRadius.circular(15)),
               ),
               Flexible(
@@ -44,7 +44,7 @@ class _MoviesWidgetState extends State<MoviesWidget> {
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [Text(movie.title)],
+                    children: [Text(anime.title)],
                   ),
                 ),
               )

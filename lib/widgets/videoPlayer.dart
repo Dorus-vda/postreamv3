@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:better_player/better_player.dart';
 import 'package:flutter/services.dart';
 import 'package:postreamv3/aidancontrols.dart';
+import 'package:postreamv3/main.dart';
 import 'package:postreamv3/sources/anilist.dart';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
@@ -13,11 +14,13 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 
+
 class VideoPlayer extends StatefulWidget {
   const VideoPlayer(
       {super.key, required this.episodeId, required this.movieId});
   final String episodeId;
   final String movieId;
+  
 
   @override
   State<VideoPlayer> createState() => _VideoPlayerState();
