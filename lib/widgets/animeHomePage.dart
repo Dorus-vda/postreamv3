@@ -25,10 +25,10 @@ class _animeHomePageState extends State<animeHomePage> {
   @override
   void initState() {
     super.initState();
-    _populateMovies();
+    _populateAnimes();
   }
 
-  void _populateMovies() async {
+  void _populateAnimes() async {
     final animes = await _fetchMovies();
     setState(() {
       _animes = animes;
@@ -53,11 +53,7 @@ class _animeHomePageState extends State<animeHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(primarySwatch: Colors.grey),
-        debugShowCheckedModeBanner: false,
-        title: 'Postream',
-        home: Scaffold(
+    return Scaffold(
           extendBody: true,
           appBar: AppBar(
             title: TextField(
@@ -72,12 +68,11 @@ class _animeHomePageState extends State<animeHomePage> {
                   icon: Icon(Icons.search),
                   onPressed: () {
                     search_title = searchcontroller.text;
-                    _populateMovies();
+                    _populateAnimes();
                   })
             ],
           ),
           body: animeWidget(animes: _animes),
-        )
-    );
+        );
   }
 }

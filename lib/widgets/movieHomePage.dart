@@ -50,11 +50,7 @@ class _movieHomePageState extends State<movieHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(primarySwatch: Colors.grey),
-        debugShowCheckedModeBanner: false,
-        title: 'Postream',
-        home: Scaffold(
+    return Scaffold(
           extendBody: true,
           appBar: AppBar(
             title: TextField(
@@ -74,7 +70,6 @@ class _movieHomePageState extends State<movieHomePage> {
             ],
           ),
           body: MoviesWidget(movies: _movies),
-        )
-    );
+        );
   }
 }

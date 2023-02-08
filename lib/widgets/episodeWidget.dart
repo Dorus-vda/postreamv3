@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:postreamv3/main.dart';
 import 'package:postreamv3/models/episode.dart';
 import '../widgets/videoPlayer.dart' as videoPlayer;
 import '../models/movie.dart';
@@ -39,7 +40,7 @@ class EpisodesWidget extends StatelessWidget {
                           image: NetworkImage(episode.image),
                           fit: BoxFit.fitWidth,
                           colorFilter: const ColorFilter.mode(
-                              Colors.grey, BlendMode.darken))),
+                              Colors.black, BlendMode.darken))),
                   width: 300,
                   height: 100,
                   child: Text(episode.title),

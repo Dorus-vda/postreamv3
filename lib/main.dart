@@ -11,8 +11,6 @@ import 'package:postreamv3/widgets/video_items.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
 import 'widgets/movieHomePage.dart';
-
-bool showNavigationBar = true;
 void main() {
   runApp(const MovieApp());
 }
@@ -49,7 +47,7 @@ class _MovieAppState extends State<MovieApp> {
           index: _selectedIndex,
           children: pageList,
         ),
-        bottomNavigationBar: showNavigationBar == true ? BottomNavyBar(
+        bottomNavigationBar: BottomNavyBar(
           curve: Curves.fastLinearToSlowEaseIn,
           selectedIndex: _selectedIndex,
           onItemSelected: (clickedIndex) {
@@ -67,7 +65,7 @@ class _MovieAppState extends State<MovieApp> {
                 icon: Icon(Icons.tv),
                 activeColor: Colors.blue)
           ],
-        ): null,
+        ),
       ),
     );
   }
