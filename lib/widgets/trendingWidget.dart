@@ -12,6 +12,8 @@ class TrendingAnime extends StatefulWidget {
 class _TrendingAnimeState extends State<TrendingAnime> {
   List<Anime> _trendingAnimes = <Anime>[];
 
+  //TEST
+
   @override
   void initState() {
     super.initState();
