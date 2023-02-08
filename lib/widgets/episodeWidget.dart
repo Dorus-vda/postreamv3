@@ -11,7 +11,8 @@ class EpisodesWidget extends StatelessWidget {
   final String movieId;
   final String cover;
 
-  EpisodesWidget({required this.episodes, required this.movieId, required this.cover});
+  EpisodesWidget(
+      {required this.episodes, required this.movieId, required this.cover});
 
   @override
   Widget build(BuildContext context) {
