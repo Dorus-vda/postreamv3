@@ -38,7 +38,7 @@ class _MovieAppState extends State<MovieApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(primarySwatch: Colors.grey),
+      theme: ThemeData(primaryColor:Color.fromARGB(255, 38, 38, 38)),
       debugShowCheckedModeBanner: false,
       title: 'Postream',
       home: Scaffold(
@@ -48,6 +48,7 @@ class _MovieAppState extends State<MovieApp> {
           children: pageList,
         ),
         bottomNavigationBar: BottomNavyBar(
+          backgroundColor: Color.fromARGB(255, 38, 38, 38),
           curve: Curves.fastLinearToSlowEaseIn,
           selectedIndex: _selectedIndex,
           onItemSelected: (clickedIndex) {

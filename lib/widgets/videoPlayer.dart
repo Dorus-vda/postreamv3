@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:better_player/better_player.dart';
 import 'package:flutter/services.dart';
+import 'package:nowplaying/nowplaying.dart';
 import 'package:postreamv3/aidancontrols.dart';
 import 'package:postreamv3/main.dart';
 import 'package:postreamv3/sources/anilist.dart';
@@ -39,6 +40,7 @@ class _VideoPlayerState extends State<VideoPlayer> {
     SystemChrome.setPreferredOrientations(
       [DeviceOrientation.landscapeLeft]);
     SystemChrome.setEnabledSystemUIOverlays([]);
+    NowPlaying.instance.start();
     getLink();
     super.initState();
   }
@@ -86,6 +88,8 @@ class _VideoPlayerState extends State<VideoPlayer> {
   ..loadRequest(Uri.parse(link));
     });
   }
+
+
 
   @override
   Widget build(BuildContext context) {

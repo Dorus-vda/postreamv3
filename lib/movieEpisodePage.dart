@@ -7,16 +7,17 @@ import 'package:postreamv3/widgets/moviesWidget.dart';
 import 'package:postreamv3/widgets/episodeWidget.dart';
 import 'package:postreamv3/widgets/video_items.dart';
 
-class EpisodePage extends StatefulWidget {
-  const EpisodePage({super.key, required this.id, required this.image});
+class movieEpisodePage extends StatefulWidget {
+  const movieEpisodePage({super.key, required this.id, required this.image, required this.type});
   final String id;
   final String image;
+  final String type;
 
   @override
-  State<EpisodePage> createState() => _EpisodePageState();
+  State<movieEpisodePage> createState() => _movieEpisodePageState();
 }
 
-class _EpisodePageState extends State<EpisodePage> {
+class _movieEpisodePageState extends State<movieEpisodePage> {
   List<Episode> _episodes = <Episode>[];
   String cover = '';
   String title = '';
@@ -37,13 +38,13 @@ class _EpisodePageState extends State<EpisodePage> {
 
   Future<List<Episode>> _fetchEpisodes() async {
     final response = await http
-        .get("https://api.consumet.org/meta/anilist/info/${widget.id}");
+        .get("https://api.consumet.org/meta/tmdb/info/${widget.id}?type=${widget.type}");
     //await http.get("http://api.consumet.org/anime/gogoanime/$search_title");
 
     if (response.statusCode == 200) {
       final result = jsonDecode(response.body);
-      cover = result["cover"];
-      title = result["title"]['english'];
+      cover = result["image"];
+      title = result["title"];
       descr = result["description"];
       descr = descr.replaceAll(RegExp('\\<.*?\\>'), '');
       Iterable list = result["episodes"];

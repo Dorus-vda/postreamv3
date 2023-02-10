@@ -5,6 +5,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:postreamv3/models/anime.dart';
 import 'package:postreamv3/widgets/animeWidget.dart';
+import 'package:postreamv3/widgets/trendingWidget.dart';
 import '../models/movie.dart';
 import 'moviesWidget.dart';
 
@@ -36,9 +37,8 @@ class _animeHomePageState extends State<animeHomePage> {
   }
 
   Future<List<Anime>> _fetchMovies() async {
-    final response = await http.get(Uri.encodeFull(
-            "http://api.consumet.org/meta/anilist/$search_title"));
-        
+    final response = await http.get(
+        Uri.encodeFull("http://api.consumet.org/meta/anilist/$search_title"));
 
     if (response.statusCode == 200) {
       final result = jsonDecode(response.body);
@@ -54,25 +54,52 @@ class _animeHomePageState extends State<animeHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-          extendBody: true,
-          appBar: AppBar(
-            title: TextField(
-              controller: searchcontroller,
-              decoration: const InputDecoration(
-                  hintText: 'Enter a title',
-                  hintStyle: TextStyle(color: Colors.white)),
-              style: const TextStyle(color: Colors.white),
-            ),
-            actions: [
-              IconButton(
-                  icon: Icon(Icons.search),
-                  onPressed: () {
-                    search_title = searchcontroller.text;
-                    _populateAnimes();
-                  })
-            ],
+        backgroundColor: Colors.black,
+        extendBody: true,
+        appBar: AppBar(
+          backgroundColor: Color.fromARGB(255, 38, 38, 38),
+          title: TextField(
+            controller: searchcontroller,
+            decoration: const InputDecoration(
+                hintText: 'Enter a title',
+                hintStyle: TextStyle(color: Colors.white)),
+            style: const TextStyle(color: Colors.white),
           ),
-          body: animeWidget(animes: _animes),
-        );
+          actions: [
+            IconButton(
+                icon: const Icon(Icons.search),
+                onPressed: () {
+                  search_title = searchcontroller.text;
+                  _populateAnimes();
+                })
+          ],
+        ),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Padding(
+              padding: EdgeInsets.only(left: 12, top: 12, bottom: 12),
+              child: Text(
+                "Popular",
+                style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 20),
+              ),
+            ),
+            SizedBox(
+              child: TrendingAnime(keyword: "popular?&perPage=20"),
+              height: 200,
+            ),
+            const Padding(
+              padding: EdgeInsets.only(left: 12, top: 12, bottom: 12),
+              child: Text(
+                "Trending",
+                style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 20),
+              ),
+            ),
+            SizedBox(
+              child: TrendingAnime(keyword: "trending?&perPage=20"),
+              height: 200,
+            ),
+          ],
+        ));
   }
 }

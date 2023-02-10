@@ -29,7 +29,7 @@ class _animeWidgetState extends State<animeWidget> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => EpisodePage(id: anime.id)),
+                    builder: (context) => EpisodePage(id: anime.id, image: anime.image)),
               );
             },
             title: Row(children: [

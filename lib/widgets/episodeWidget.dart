@@ -32,21 +32,23 @@ class EpisodesWidget extends StatelessWidget {
                         )),
               );
             },
-            title: Row(children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(15),
-                child: Container(
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: NetworkImage(episode.image),
-                          fit: BoxFit.fitWidth,
-                          colorFilter: const ColorFilter.mode(
-                              Colors.black, BlendMode.darken))),
-                  width: 300,
-                  height: 100,
-                  child: Text(episode.title),
+            title: Column(children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                ),
+                width: MediaQuery.of(context).size.width - 50,
+                child: Row(
+                  children: [Padding(padding: EdgeInsets.only(left: 0), child: SizedBox(child: Image.network(episode.image), width: 150,)), Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: SizedBox(child: Text(episode.title, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)), width: 200,),
+                  )],
                 ),
               ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 12.0, top: 8.0),
+                child: SizedBox(child: Text(episode.description, style: TextStyle(color: Colors.white, fontSize: 13),), width: MediaQuery.of(context).size.width,),
+              )
             ]),
           ),
         );

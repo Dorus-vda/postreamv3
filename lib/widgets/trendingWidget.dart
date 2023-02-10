@@ -1,18 +1,23 @@
 import 'dart:convert';
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:postreamv3/models/anime.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
+import '../episodePage.dart';
+
 class TrendingAnime extends StatefulWidget {
+  final String keyword;
+
+  TrendingAnime({required this.keyword});
+
   @override
-  State<TrendingAnime> createState() => _TrendingAnimeState();
+  State<TrendingAnime> createState() => trendingAnimeListtate();
 }
 
-class _TrendingAnimeState extends State<TrendingAnime> {
-  List<Anime> _trendingAnimes = <Anime>[];
-
-  //TEST
+class trendingAnimeListtate extends State<TrendingAnime> {
+  List<Anime> trendingAnimeList = <Anime>[];
 
   @override
   void initState() {
@@ -22,12 +27,12 @@ class _TrendingAnimeState extends State<TrendingAnime> {
 
   Future<void> _fetchTrendingAnimes() async {
     final response =
-        await http.get("https://api.consumet.org/meta/anilist/trending");
+        await http.get("https://api.consumet.org/meta/anilist/${widget.keyword}");
     if (response.statusCode == 200) {
       final result = jsonDecode(response.body);
-      Iterable list = result;
+      Iterable list = result["results"];
       setState(() {
-        _trendingAnimes = list.map((anime) => Anime.fromJson(anime)).toList();
+        trendingAnimeList = list.map((anime) => Anime.fromJson(anime)).toList();
       });
     } else {
       throw Exception("Could not load trending anime");
@@ -36,33 +41,48 @@ class _TrendingAnimeState extends State<TrendingAnime> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 200,
-      child: CarouselSlider(
-        options: CarouselOptions(
-          aspectRatio: 16 / 9,
-          enlargeCenterPage: true,
-        ),
-        items: List.generate(_trendingAnimes.length, (index) {
-          final anime = _trendingAnimes[index];
-          return Container(
-            width: 200,
-            margin: EdgeInsets.symmetric(horizontal: 5),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+    return ListView.builder(
+      padding: EdgeInsets.zero,
+      scrollDirection: Axis.horizontal,
+      itemCount: trendingAnimeList.length,
+      itemBuilder: (context, index) {
+        final anime = trendingAnimeList[index];
+        return Container(
+          width: 150,
+          height: 200,
+          child: ListTile(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => EpisodePage(id: anime.id, image: anime.image)),
+              );
+            },
+            title: Column(
               children: [
-                ClipRRect(
+                SizedBox(
+                  height: 150,
+                  child: ClipRRect(
                     child: Image.network(anime.image),
-                    borderRadius: BorderRadius.circular(15)),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(anime.title),
-                )
+                  ),
+                ),
+                Flexible(
+                  child: Padding(
+                    padding: EdgeInsets.all(4.0),
+                    child: Container(
+                      child: Text(
+                        anime.title,
+                        style: TextStyle(fontSize: 14, color: Colors.white),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
-          );
-        }),
-      ),
+          ),
+        );
+      },
     );
   }
 }

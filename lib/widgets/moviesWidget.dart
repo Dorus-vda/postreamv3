@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:postreamv3/episodePage.dart';
 import 'package:postreamv3/main.dart';
+import 'package:postreamv3/movieEpisodePage.dart';
 import '../models/movie.dart';
 
 class MoviesWidget extends StatefulWidget {
@@ -29,7 +30,7 @@ class _MoviesWidgetState extends State<MoviesWidget> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => EpisodePage(id: movie.id)),
+                    builder: (context) => movieEpisodePage(id: movie.id.toString(), image: movie.image, type: movie.type)),
               );
             },
             title: Row(children: [
