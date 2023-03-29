@@ -1,10 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:postreamv3/TVepisodePage.dart';
 import 'package:postreamv3/episodePage.dart';
 import 'package:postreamv3/main.dart';
 import 'package:postreamv3/movieEpisodePage.dart';
-import '../models/movie.dart';
+import '../../models/movie.dart';
 
 class MoviesWidget extends StatefulWidget {
   final List<Movie> movies;
@@ -30,15 +31,16 @@ class _MoviesWidgetState extends State<MoviesWidget> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => movieEpisodePage(id: movie.id.toString(), image: movie.image, type: movie.type)),
+                    builder: movie.type == "Movie" ? (context) => movieEpisodePage(id: movie.id.toString(), image: movie.image, type: 'Movie'): (context) => TvEpisodePage(id: movie.id.toString(), image: movie.image, type: 'tv')
+                    ),
               );
             },
             title: Row(children: [
               SizedBox(
                 width: 200,
                 child: ClipRRect(
-                    child: Image.network(movie.image),
-                    borderRadius: BorderRadius.circular(15)),
+                    borderRadius: BorderRadius.circular(15),
+                    child: Image.network(movie.image)),
               ),
               Flexible(
                 child: Padding(

@@ -31,8 +31,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  http: ^0.12.2
-  better_player: ^0.0.83
+  http: ^0.13.0
   video_player: ^2.4.8
   chewie: ^1.3.5
   bouncing_widget: ^2.0.0
@@ -45,6 +44,9 @@ dependencies:
   bottom_navy_bar: ^5.6.0
   persistent_bottom_nav_bar: any
   nowplaying: ^2.0.6
+  cached_network_image: ^3.2.3
+  flick_video_player: ^0.5.0
+  subtitle_wrapper_package: any
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -81,6 +83,11 @@ flutter:
 
   # For details regarding adding assets from package dependencies, see
   # https://flutter.dev/assets-and-images/#from-packages
+
+  fonts:
+    - family:  MyFlutterApp
+      fonts:      
+      - asset: lib/fonts/MyFlutterApp.ttf
 
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a

@@ -1,7 +1,4 @@
 import 'dart:convert';
-import 'package:better_player/better_player.dart';
-import 'package:video_player/video_player.dart';
-import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:postreamv3/widgets/video_items.dart';

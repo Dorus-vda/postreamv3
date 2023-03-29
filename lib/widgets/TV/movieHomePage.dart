@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import '../models/movie.dart';
+import '../../models/movie.dart';
 import 'moviesWidget.dart';
 
 class movieHomePage extends StatefulWidget {
@@ -15,7 +15,7 @@ class movieHomePage extends StatefulWidget {
 
 class _movieHomePageState extends State<movieHomePage> {
   List<Movie> _movies = <Movie>[];
-  String search_title = "Power Rangers";
+  String search_title = "Prison Break";
 
   ShapeBorder? bottomBarShape = const RoundedRectangleBorder(
       borderRadius: BorderRadius.all(Radius.circular(25)));
@@ -35,7 +35,7 @@ class _movieHomePageState extends State<movieHomePage> {
 
   Future<List<Movie>> _fetchMovies() async {
     final response =
-        await http.get("https://api.consumet.org/meta/tmdb/$search_title");
+        await http.get(Uri.parse("https://api.consumet.org/meta/tmdb/$search_title"));
 
     if (response.statusCode == 200) {
       final result = jsonDecode(response.body);

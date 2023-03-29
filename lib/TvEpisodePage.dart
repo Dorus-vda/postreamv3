@@ -4,27 +4,27 @@ import 'package:http/http.dart' as http;
 import 'package:postreamv3/models/episode.dart';
 import 'package:postreamv3/models/movie.dart';
 import 'package:postreamv3/models/movieEpisode.dart';
+import 'package:postreamv3/widgets/TvEpisodeWidget.dart';
 import 'package:postreamv3/widgets/episodeWidget.dart';
 import 'package:postreamv3/widgets/movieEpisodeWidget.dart';
 import 'package:postreamv3/widgets/video_items.dart';
 
-class movieEpisodePage extends StatefulWidget {
-  const movieEpisodePage({super.key, required this.id, required this.image, required this.type});
+class TvEpisodePage extends StatefulWidget {
+  const TvEpisodePage({super.key, required this.id, required this.image, required this.type});
   final String id;
   final String image;
   final String type;
 
   @override
-  State<movieEpisodePage> createState() => _movieEpisodePageState();
+  State<TvEpisodePage> createState() => _TvEpisodePageState();
 }
 
-class _movieEpisodePageState extends State<movieEpisodePage> {
+class _TvEpisodePageState extends State<TvEpisodePage> {
   List<MovieEpisode> _episodes = <MovieEpisode>[];
   String cover = '';
   String title = '';
   String descr = '';
   String episodeId = '';
-  String movieId = '';
 
   @override
   void initState() {
@@ -39,21 +39,17 @@ class _movieEpisodePageState extends State<movieEpisodePage> {
     });
   }
 
-  Future _fetchEpisodes() async {
+  Future<List<MovieEpisode>> _fetchEpisodes() async {
     final response = await http
-        .get(Uri.parse("https://api.consumet.org/meta/tmdb/info/${widget.id}?type=${widget.type}"));
+        .get(Uri.parse("https://api.consumet.org/meta/tmdb/info/${widget.id}?type=tv"));
     //await http.get("http://api.consumet.org/anime/gogoanime/$search_title");
 
     if (response.statusCode == 200) {
       final result = jsonDecode(response.body);
-      title = result['title'] ?? "no title available";
-      cover = result['image'] ?? "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/330px-No-Image-Placeholder.svg.png";
-      descr = result['description'] ?? "no description available";
-      episodeId = result['episodeId'];
-      movieId = result['id'];
-
-     // Iterable list = result["episodes"];
-     // return list.map((movieEpisode) => MovieEpisode.fromJson(movieEpisode)).toList();
+      descr = result['description'];
+      title = result['title'];
+      Iterable list = result["seasons"][0]["episodes"];
+      return list.map((movieEpisode) => MovieEpisode.fromJson(movieEpisode)).toList();
     } else {
       throw Exception("Kan de films niet laden!");
     }
@@ -63,7 +59,7 @@ class _movieEpisodePageState extends State<movieEpisodePage> {
 
   @override
   Widget build(BuildContext context) {
-    if (cover != '') {
+    if (cover == '') {
       return MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Postream',
@@ -90,7 +86,6 @@ class _movieEpisodePageState extends State<movieEpisodePage> {
                             child: Text(
                               title,
                               style: const TextStyle(
-                                  
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white),
@@ -115,11 +110,9 @@ class _movieEpisodePageState extends State<movieEpisodePage> {
                   ],
                 ),
                 Flexible(
-                  child: movieEpisodeWidget(
-                    cover: cover,
+                  child: TvEpisodeWidget(
                     episodes: _episodes,
-                    movieId: movieId,
-                    episodeId: episodeId,
+                    movieId: widget.id,
                   ),
                 ),
               ],

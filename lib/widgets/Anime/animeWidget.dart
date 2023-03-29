@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:postreamv3/episodePage.dart';
 import 'package:postreamv3/models/anime.dart';
-import '../models/movie.dart';
 
 class animeWidget extends StatefulWidget {
   final List<Anime> animes;

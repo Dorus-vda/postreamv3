@@ -1,9 +1,9 @@
 import 'dart:convert';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:postreamv3/models/episode.dart';
 import 'package:postreamv3/models/movie.dart';
-import 'package:postreamv3/widgets/moviesWidget.dart';
 import 'package:postreamv3/widgets/episodeWidget.dart';
 import 'package:postreamv3/widgets/video_items.dart';
 
@@ -37,13 +37,13 @@ class _EpisodePageState extends State<EpisodePage> {
 
   Future<List<Episode>> _fetchEpisodes() async {
     final response = await http
-        .get("https://api.consumet.org/meta/anilist/info/${widget.id}");
+        .get(Uri.parse("https://api.consumet.org/meta/anilist/info/${widget.id}"));
     //await http.get("http://api.consumet.org/anime/gogoanime/$search_title");
 
     if (response.statusCode == 200) {
       final result = jsonDecode(response.body);
       cover = result["cover"];
-      title = result["title"]['english'];
+      title = result["title"]['english'] ?? "no title available";
       descr = result["description"];
       descr = descr.replaceAll(RegExp('\\<.*?\\>'), '');
       Iterable list = result["episodes"];
@@ -73,7 +73,7 @@ class _EpisodePageState extends State<EpisodePage> {
                   children: [
                     Container(
                       width: 150,
-                      child: Image.network(widget.image),
+                      child: CachedNetworkImage(imageUrl: widget.image),
                     ),
                     Column(
                       children: [
@@ -84,7 +84,6 @@ class _EpisodePageState extends State<EpisodePage> {
                             child: Text(
                               title,
                               style: const TextStyle(
-                                  
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white),
@@ -123,8 +122,8 @@ class _EpisodePageState extends State<EpisodePage> {
           backgroundColor: Colors.black,
           body: Center(
               child: CircularProgressIndicator.adaptive(
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
-                  backgroundColor: Colors.white)));
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  backgroundColor: Colors.black)));
     }
   }
 }
