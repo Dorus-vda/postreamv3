@@ -1,12 +1,12 @@
 import 'dart:convert';
-import 'package:bottom_navy_bar/bottom_navy_bar.dart';
+import 'package:flashy_tab_bar2/flashy_tab_bar2.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
 import 'package:postreamv3/models/movie.dart';
 import 'package:postreamv3/widgets/TV/animeHomePage.dart';
 import 'customIcons/my_flutter_app_icons.dart' as CustomIcons;
-import 'package:postreamv3/widgets/videoPlayer.dart';
+import 'package:postreamv3/widgets/better_player.dart';
 import 'package:postreamv3/widgets/video_items.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'widgets/TV/movieHomePage.dart';
@@ -30,15 +30,15 @@ class _MovieAppState extends State<MovieApp> {
 
   @override
   void initState() {
-    pageList.add(animeHomePage());
-    pageList.add(movieHomePage());
+    pageList.add(const animeHomePage());
+    pageList.add(const movieHomePage());
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(primaryColor:Color.fromARGB(255, 38, 38, 38)),
+      theme: ThemeData(primaryColor:const Color.fromARGB(255, 38, 38, 38)),
       debugShowCheckedModeBanner: false,
       title: 'Postream',
       home: Scaffold(
@@ -47,23 +47,24 @@ class _MovieAppState extends State<MovieApp> {
           index: _selectedIndex,
           children: pageList,
         ),
-        bottomNavigationBar: BottomNavyBar(
-          backgroundColor: Color.fromARGB(255, 38, 38, 38),
-          curve: Curves.fastLinearToSlowEaseIn,
+        bottomNavigationBar: FlashyTabBar(
+          height: 55,
+          backgroundColor: const Color.fromARGB(255, 38, 38, 38),
           selectedIndex: _selectedIndex,
+          showElevation: true,
           onItemSelected: (clickedIndex) {
             setState(() {
               _selectedIndex = clickedIndex;
             });
           },
           items: [
-            BottomNavyBarItem(
-                title: Text("Anime"),
-                icon: Icon(CustomIcons.MyFlutterApp.kanji),
+            FlashyTabBarItem(
+                title: const Text("Anime"),
+                icon: const Icon(CustomIcons.MyFlutterApp.kanji),
                 activeColor: Colors.red),
-            BottomNavyBarItem(
-                title: Text("TV"),
-                icon: Icon(Icons.tv_rounded),
+            FlashyTabBarItem(
+                title: const Text("TV"),
+                icon: const Icon(Icons.tv_rounded),
                 activeColor: Colors.blue)
           ],
         ),

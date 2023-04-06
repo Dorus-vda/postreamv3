@@ -69,7 +69,9 @@ class _TvEpisodePageState extends State<TvEpisodePage> {
               backgroundColor: Color.fromARGB(255, 38, 38, 38),
               title: const Text("Episodes"),
             ),
-            body: Column(
+            body: ListView(
+              shrinkWrap: true,
+              scrollDirection: Axis.vertical,
               children: [
                 Row(
                   children: [
