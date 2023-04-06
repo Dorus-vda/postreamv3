@@ -67,54 +67,58 @@ class _EpisodePageState extends State<EpisodePage> {
               backgroundColor: Color.fromARGB(255, 38, 38, 38),
               title: const Text("Episodes"),
             ),
-            body: Column(
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      width: 150,
-                      child: CachedNetworkImage(imageUrl: widget.image),
-                    ),
-                    Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 8.0, bottom: 4.0),
-                          child: SizedBox(
-                            width: MediaQuery.of(context).size.width - 158,
-                            child: Text(
-                              title,
-                              style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
+            body: Container(
+              child: ListView(
+                shrinkWrap: true,
+                scrollDirection: Axis.vertical,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        width: 150,
+                        child: CachedNetworkImage(imageUrl: widget.image),
+                      ),
+                      Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 8.0, bottom: 4.0),
+                            child: SizedBox(
+                              width: MediaQuery.of(context).size.width - 158,
+                              child: Text(
+                                title,
+                                style: const TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white),
+                              ),
                             ),
                           ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(left: 8, right: 8, bottom: 12),
-                          child: SizedBox(
-                              width: MediaQuery.of(context).size.width - 166,
-                              height: 200,
-                              child: SingleChildScrollView(
-                                scrollDirection: Axis.vertical,
-                                child: Text(
-                                  descr,
-                                  style: const TextStyle(color: Colors.white),
-                                ),
-                              )),
-                        )
-                      ],
-                    )
-                  ],
-                ),
-                Flexible(
-                  child: EpisodesWidget(
-                    cover: cover,
-                    episodes: _episodes,
-                    movieId: widget.id,
+                          Padding(
+                            padding: EdgeInsets.only(left: 8, right: 8, bottom: 12),
+                            child: SizedBox(
+                                width: MediaQuery.of(context).size.width - 166,
+                                height: 200,
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.vertical,
+                                  child: Text(
+                                    descr,
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
+                                )),
+                          )
+                        ],
+                      )
+                    ],
                   ),
-                ),
-              ],
+                  Flexible(
+                    child: EpisodesWidget(
+                      cover: cover,
+                      episodes: _episodes,
+                      movieId: widget.id,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ));
     } else {

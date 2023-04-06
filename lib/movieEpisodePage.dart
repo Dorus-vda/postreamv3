@@ -117,6 +117,7 @@ class _movieEpisodePageState extends State<movieEpisodePage> {
                 Flexible(
                   child: movieEpisodeWidget(
                     cover: cover,
+                    title: title,
                     episodes: _episodes,
                     movieId: movieId,
                     episodeId: episodeId,

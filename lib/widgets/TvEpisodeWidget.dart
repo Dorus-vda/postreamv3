@@ -4,7 +4,8 @@ import 'package:http/http.dart' as http;
 import 'package:postreamv3/main.dart';
 import 'package:postreamv3/models/episode.dart';
 import 'package:postreamv3/models/movieEpisode.dart';
-import '../widgets/videoPlayer.dart' as videoPlayer;
+import 'package:postreamv3/widgets/better_player.dart';
+import 'videoPlayer.dart' as videoPlayer;
 import '../models/movie.dart';
 
 class TvEpisodeWidget extends StatelessWidget {
@@ -17,6 +18,8 @@ class TvEpisodeWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
       itemCount: episodes.length,
       itemBuilder: (context, index) {
         final episode = episodes[index];
@@ -26,7 +29,9 @@ class TvEpisodeWidget extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => videoPlayer.VideoPlayer(
+                    builder: (context) => better_player(
+                          title: episode.title,
+                          cover: episode.image,
                           episodeId: episode.id,
                           movieId: movieId,
                           isAnime: false,

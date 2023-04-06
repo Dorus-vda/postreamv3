@@ -2,12 +2,11 @@ import 'dart:async';
 import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:chewie/src/chewie_player.dart';
+/* import 'package:chewie/src/chewie_player.dart';
 import 'package:chewie/src/helpers/utils.dart';
 import 'package:chewie/src/notifiers/index.dart';
 
@@ -585,4 +584,4 @@ initState();
 
     super.didChangeDependencies();
   }
-    }
+    } */
