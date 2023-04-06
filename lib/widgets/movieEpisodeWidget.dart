@@ -1,26 +1,23 @@
 import 'dart:convert';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:postreamv3/main.dart';
 import 'package:postreamv3/models/episode.dart';
+import 'package:postreamv3/models/movieEpisode.dart';
 import '../widgets/videoPlayer.dart' as videoPlayer;
 import '../models/movie.dart';
 
-class EpisodesWidget extends StatelessWidget {
-  final List<Episode> episodes;
+class movieEpisodeWidget extends StatelessWidget {
+  final List<MovieEpisode> episodes;
   final String movieId;
   final String cover;
+  final String episodeId;
 
-  EpisodesWidget(
-      {required this.episodes, required this.movieId, required this.cover});
+  movieEpisodeWidget(
+      {required this.episodes, required this.movieId, required this.cover, required this.episodeId});
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: episodes.length,
-      itemBuilder: (context, index) {
-        final episode = episodes[index];
         return GestureDetector(
           child: ListTile(
             onTap: () {
@@ -28,9 +25,9 @@ class EpisodesWidget extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                     builder: (context) => videoPlayer.VideoPlayer(
-                          episodeId: episode.id,
+                          episodeId: episodeId,
                           movieId: movieId,
-                          isAnime: true,
+                          isAnime: false,
                         )),
               );
             },
@@ -41,20 +38,14 @@ class EpisodesWidget extends StatelessWidget {
                 ),
                 width: MediaQuery.of(context).size.width - 50,
                 child: Row(
-                  children: [Padding(padding: EdgeInsets.only(left: 0), child: SizedBox(child: Image.network(episode.image), height: 90,)), Padding(
+                  children: [Padding(padding: EdgeInsets.only(left: 0), child: SizedBox(child: Image.network(cover), width: 150,)), Padding(
                     padding: const EdgeInsets.only(left: 8.0),
-                    child: SizedBox(child: Text(episode.title, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold))),
+                    child: SizedBox(child: Text('FULL', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)), width: 200,),
                   )],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 12.0, top: 8.0),
-                child: SizedBox(child: Text(episode.description, style: TextStyle(color: Colors.white, fontSize: 13),), width: MediaQuery.of(context).size.width,),
-              )
             ]),
           ),
         );
-      },
-    );
+      }
   }
-}

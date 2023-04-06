@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart';
 import 'package:postreamv3/models/movie.dart';
-import 'package:postreamv3/widgets/animeHomePage.dart';
-import 'package:postreamv3/widgets/moviesWidget.dart';
+import 'package:postreamv3/widgets/TV/animeHomePage.dart';
+import 'customIcons/my_flutter_app_icons.dart' as CustomIcons;
 import 'package:postreamv3/widgets/videoPlayer.dart';
 import 'package:postreamv3/widgets/video_items.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'widgets/TV/movieHomePage.dart';
 
-import 'widgets/movieHomePage.dart';
 void main() {
   runApp(const MovieApp());
 }
@@ -59,11 +59,11 @@ class _MovieAppState extends State<MovieApp> {
           items: [
             BottomNavyBarItem(
                 title: Text("Anime"),
-                icon: Icon(Icons.home_filled),
+                icon: Icon(CustomIcons.MyFlutterApp.kanji),
                 activeColor: Colors.red),
             BottomNavyBarItem(
                 title: Text("TV"),
-                icon: Icon(Icons.tv),
+                icon: Icon(Icons.tv_rounded),
                 activeColor: Colors.blue)
           ],
         ),

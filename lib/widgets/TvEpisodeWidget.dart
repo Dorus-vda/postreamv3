@@ -1,19 +1,18 @@
 import 'dart:convert';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:postreamv3/main.dart';
 import 'package:postreamv3/models/episode.dart';
+import 'package:postreamv3/models/movieEpisode.dart';
 import '../widgets/videoPlayer.dart' as videoPlayer;
 import '../models/movie.dart';
 
-class EpisodesWidget extends StatelessWidget {
-  final List<Episode> episodes;
+class TvEpisodeWidget extends StatelessWidget {
+  final List<MovieEpisode> episodes;
   final String movieId;
-  final String cover;
 
-  EpisodesWidget(
-      {required this.episodes, required this.movieId, required this.cover});
+  TvEpisodeWidget(
+      {required this.episodes, required this.movieId});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +29,7 @@ class EpisodesWidget extends StatelessWidget {
                     builder: (context) => videoPlayer.VideoPlayer(
                           episodeId: episode.id,
                           movieId: movieId,
-                          isAnime: true,
+                          isAnime: false,
                         )),
               );
             },
@@ -41,9 +40,9 @@ class EpisodesWidget extends StatelessWidget {
                 ),
                 width: MediaQuery.of(context).size.width - 50,
                 child: Row(
-                  children: [Padding(padding: EdgeInsets.only(left: 0), child: SizedBox(child: Image.network(episode.image), height: 90,)), Padding(
+                  children: [Padding(padding: EdgeInsets.only(left: 0), child: SizedBox(child: Image.network(episode.image), width: 150,)), Padding(
                     padding: const EdgeInsets.only(left: 8.0),
-                    child: SizedBox(child: Text(episode.title, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold))),
+                    child: SizedBox(child: Text(episode.title, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)), width: 200,),
                   )],
                 ),
               ),
