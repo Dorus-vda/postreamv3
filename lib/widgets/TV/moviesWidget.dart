@@ -47,7 +47,7 @@ class _MoviesWidgetState extends State<MoviesWidget> {
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [Text(movie.title)],
+                    children: [Text(movie.title, style: TextStyle(color: Colors.white),)],
                   ),
                 ),
               )

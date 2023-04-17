@@ -30,7 +30,7 @@ class _AnimeWidgetState extends State<AnimeWidget> {
                 final anime = filteredAnimes.length > 0
                     ? filteredAnimes[index]
                     : widget.animes[index];
-
+                if (anime.title != ''){
                 return GestureDetector(
                   child: ListTile(
                     onTap: () {
@@ -66,6 +66,10 @@ class _AnimeWidgetState extends State<AnimeWidget> {
                     ]),
                   ),
                 );
+                }
+                else{
+                  return Container();
+                }
               },
             ),
           ),

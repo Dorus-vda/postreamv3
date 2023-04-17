@@ -29,11 +29,16 @@ class VideoPlayer extends StatefulWidget {
 class _VideoPlayerState extends State<VideoPlayer> {
   //late FlickManager flickManager;
   VideoPlayerController? _videoPlayerController;
+  BetterPlayerController? _betterPlayerController;
   WebViewController? controller;
   String link = '';
 
   @override
   void initState() {
+    SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight],
+    );
+    SystemChrome.setEnabledSystemUIOverlays([]);
     getLink();
     super.initState();
   }
@@ -43,7 +48,8 @@ class _VideoPlayerState extends State<VideoPlayer> {
     String tvUrl = '';
     templink = await anilist(id: widget.episodeId, movieId: widget.movieId)
         .getEpisodeId();
-    setState(() {
+    link = templink;
+    /* setState(() {
       link = templink;
       controller = WebViewController()
         ..setJavaScriptMode(JavaScriptMode.unrestricted)
@@ -65,19 +71,27 @@ class _VideoPlayerState extends State<VideoPlayer> {
           ),
         )
         ..loadRequest(Uri.parse(templink));
-    });
+    }); */
+    BetterPlayerDataSource betterPlayerDataSource =
+        BetterPlayerDataSource(BetterPlayerDataSourceType.network, templink);
+    _betterPlayerController = BetterPlayerController(
+      const BetterPlayerConfiguration(
+        fit: BoxFit.contain,
+        autoDetectFullscreenAspectRatio: true,
+        autoDispose: true,
+        autoPlay: true,
+      ),
+      betterPlayerDataSource: betterPlayerDataSource,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    if (link != '') {
-      return SafeArea(
-        child: Scaffold(
-          backgroundColor: Colors.black,
-          body: WebViewWidget(controller: controller!),
-        ),
+    if (_betterPlayerController != null) {
+      return Scaffold(
+        body: BetterPlayer(controller: _betterPlayerController!,),
       );
-    } 
+    }
     return Center(
       child: CircularProgressIndicator.adaptive(
         valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
@@ -91,6 +105,7 @@ class _VideoPlayerState extends State<VideoPlayer> {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     _videoPlayerController?.dispose();
     //flickManager.dispose();
+    _betterPlayerController!.dispose();
     link = '';
     super.dispose();
   }

@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:postreamv3/models/anime.dart';
-import 'package:postreamv3/widgets/animeWidget.dart';
+import 'package:postreamv3/widgets/Anime/animeWidget.dart';
 import 'package:postreamv3/widgets/searchWidget.dart';
-import 'package:postreamv3/widgets/trendingWidget.dart';
+import 'package:postreamv3/widgets/Anime/trendingWidget.dart';
 
 class animeHomePage extends StatefulWidget {
   const animeHomePage({Key? key}) : super(key: key);
@@ -66,6 +66,7 @@ class _AnimeHomePageState extends State<animeHomePage> {
   Widget build(BuildContext context) {
     return Material(
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.black,
         extendBody: true,
         appBar: AppBar(
@@ -74,7 +75,7 @@ class _AnimeHomePageState extends State<animeHomePage> {
             controller: searchController,
             decoration: const InputDecoration(
               hintText: 'Enter a title',
-              hintStyle: TextStyle(color: Colors.white),
+              hintStyle: TextStyle(color: Colors.grey),
             ),
             style: const TextStyle(color: Colors.white),
           ),
@@ -87,40 +88,43 @@ class _AnimeHomePageState extends State<animeHomePage> {
             ),
           ],
         ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Padding(
-              padding: EdgeInsets.only(left: 12, top: 12, bottom: 12),
-              child: Text(
-                "Popular",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  fontSize: 20,
+        body: SingleChildScrollView(
+          physics: NeverScrollableScrollPhysics(),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Padding(
+                padding: EdgeInsets.only(left: 12, top: 12, bottom: 12),
+                child: Text(
+                  "Popular",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    fontSize: 20,
+                  ),
                 ),
               ),
-            ),
-            SizedBox(
-              child: TrendingAnime(keyword: "popular?&perPage=20"),
-              height: 200,
-            ),
-            const Padding(
-              padding: EdgeInsets.only(left: 12, top: 12, bottom: 12),
-              child: Text(
-                "Trending",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  fontSize: 20,
+              SizedBox(
+                child: TrendingAnime(keyword: "popular?&perPage=20"),
+                height: 200,
+              ),
+              const Padding(
+                padding: EdgeInsets.only(left: 12, top: 12, bottom: 12),
+                child: Text(
+                  "Trending",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    fontSize: 20,
+                  ),
                 ),
               ),
-            ),
-            SizedBox(
-              child: TrendingAnime(keyword: "trending?&perPage=20"),
-              height: 200,
-            ),
-          ],
+              SizedBox(
+                child: TrendingAnime(keyword: "trending?&perPage=20"),
+                height: 200,
+              ),
+            ],
+          ),
         ),
       ),
     );
