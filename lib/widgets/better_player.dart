@@ -51,22 +51,32 @@ class _better_playerState extends State<better_player> {
         BetterPlayerDataSourceType.network, streamlink!,
         subtitles: [
           BetterPlayerSubtitlesSource(
-          name: "NL",
-          selectedByDefault: true,
-          type: BetterPlayerSubtitlesSourceType.network,
-          urls: [nl_subtitleURL]
-        ),
+              name: "NL",
+              selectedByDefault: true,
+              type: BetterPlayerSubtitlesSourceType.network,
+              urls: [nl_subtitleURL]),
           BetterPlayerSubtitlesSource(
-          name: "EN",
-          selectedByDefault: true,
-          type: BetterPlayerSubtitlesSourceType.network,
-          urls: [en_subtitleURL]
-        ),],
+              name: "EN",
+              selectedByDefault: true,
+              type: BetterPlayerSubtitlesSourceType.network,
+              urls: [en_subtitleURL]),
+        ],
         notificationConfiguration: BetterPlayerNotificationConfiguration(
-            showNotification: true, title: widget.title, imageUrl: widget.cover, activityName: "postreamV3"));
+            showNotification: true,
+            title: widget.title,
+            imageUrl: widget.cover,
+            activityName: "postreamV3"));
     setState(() {
       _betterPlayerController = BetterPlayerController(
           const BetterPlayerConfiguration(
+              controlsConfiguration: BetterPlayerControlsConfiguration(
+                enableFullscreen: false,
+                progressBarPlayedColor: Colors.red,
+                progressBarBufferedColor: Colors.grey,
+                progressBarBackgroundColor: Colors.black,
+                enableQualities: false,
+                playerTheme: BetterPlayerTheme.material,
+              ),
               fit: BoxFit.contain,
               autoDetectFullscreenAspectRatio: true,
               subtitlesConfiguration: BetterPlayerSubtitlesConfiguration(
@@ -84,11 +94,9 @@ class _better_playerState extends State<better_player> {
         .getEpisodeId();
     String url = episodeData[0];
 
-    if (episodeData[1] != null)
-      en_subtitleURL = episodeData[1];
-    
-    if (episodeData[2] != null)
-      nl_subtitleURL = episodeData[2];
+    if (episodeData[1] != null) en_subtitleURL = episodeData[1];
+
+    if (episodeData[2] != null) nl_subtitleURL = episodeData[2];
 
     return url;
   }

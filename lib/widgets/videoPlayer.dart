@@ -74,28 +74,39 @@ class _VideoPlayerState extends State<VideoPlayer> {
     }); */
     BetterPlayerDataSource betterPlayerDataSource =
         BetterPlayerDataSource(BetterPlayerDataSourceType.network, templink);
-    _betterPlayerController = BetterPlayerController(
-      const BetterPlayerConfiguration(
-        fit: BoxFit.contain,
-        autoDetectFullscreenAspectRatio: true,
-        autoDispose: true,
-        autoPlay: true,
-      ),
-      betterPlayerDataSource: betterPlayerDataSource,
-    );
+    setState(() {
+      _betterPlayerController = BetterPlayerController(
+        const BetterPlayerConfiguration(
+          controlsConfiguration: BetterPlayerControlsConfiguration(
+            enableFullscreen: false,
+            progressBarPlayedColor: Colors.red,
+            progressBarBufferedColor: Colors.grey,
+            progressBarBackgroundColor: Colors.black,
+            enableQualities: false,
+            playerTheme: BetterPlayerTheme.material,
+          ),
+          fit: BoxFit.contain,
+          autoDispose: true,
+          autoPlay: true,
+        ),
+        betterPlayerDataSource: betterPlayerDataSource,
+      );
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     if (_betterPlayerController != null) {
       return Scaffold(
-        body: BetterPlayer(controller: _betterPlayerController!,),
+        backgroundColor: Colors.black,
+        body: BetterPlayer(
+          controller: _betterPlayerController!,
+        ),
       );
     }
     return Center(
-      child: CircularProgressIndicator.adaptive(
-        valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
-        backgroundColor: Colors.white,
+      child: CircularProgressIndicator(
+        color: Colors.white,
       ),
     );
   }
@@ -106,6 +117,7 @@ class _VideoPlayerState extends State<VideoPlayer> {
     _videoPlayerController?.dispose();
     //flickManager.dispose();
     _betterPlayerController!.dispose();
+    _betterPlayerController = null;
     link = '';
     super.dispose();
   }
