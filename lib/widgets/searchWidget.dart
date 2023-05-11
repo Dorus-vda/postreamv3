@@ -39,7 +39,7 @@ class _searchWidgetState extends State<searchWidget> {
                     child: Image.network(anime.image),
                     borderRadius: BorderRadius.circular(15)),
               ),
-              Flexible(
+              Container(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(

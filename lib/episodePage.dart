@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:postreamv3/models/episode.dart';
 import 'package:postreamv3/models/movie.dart';
+import 'package:postreamv3/noScrollGlow.dart';
 import 'package:postreamv3/widgets/episodeWidget.dart';
 import 'package:postreamv3/widgets/video_items.dart';
 
@@ -68,56 +69,60 @@ class _EpisodePageState extends State<EpisodePage> {
               title: const Text("Episodes"),
             ),
             body: Container(
-              child: ListView(
-                shrinkWrap: true,
-                scrollDirection: Axis.vertical,
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                        width: 150,
-                        child: CachedNetworkImage(imageUrl: widget.image),
-                      ),
-                      Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 8.0, bottom: 4.0),
-                            child: SizedBox(
-                              width: MediaQuery.of(context).size.width - 158,
-                              child: Text(
-                                title,
-                                style: const TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white),
+              child: ScrollConfiguration(
+                behavior: noScrollGlow(),
+                child: ListView(
+                  shrinkWrap: true,
+                  physics: BouncingScrollPhysics(),
+                  scrollDirection: Axis.vertical,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          width: 150,
+                          child: CachedNetworkImage(imageUrl: widget.image),
+                        ),
+                        Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(left: 8.0, bottom: 4.0),
+                              child: SizedBox(
+                                width: MediaQuery.of(context).size.width - 158,
+                                child: Text(
+                                  title,
+                                  style: const TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                ),
                               ),
                             ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(left: 8, right: 8, bottom: 12),
-                            child: SizedBox(
-                                width: MediaQuery.of(context).size.width - 166,
-                                height: 200,
-                                child: SingleChildScrollView(
-                                  scrollDirection: Axis.vertical,
-                                  child: Text(
-                                    descr,
-                                    style: const TextStyle(color: Colors.white),
-                                  ),
-                                )),
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                  Flexible(
-                    child: EpisodesWidget(
-                      cover: cover,
-                      episodes: _episodes,
-                      movieId: widget.id,
+                            Padding(
+                              padding: EdgeInsets.only(left: 8, right: 8, bottom: 12),
+                              child: SizedBox(
+                                  width: MediaQuery.of(context).size.width - 166,
+                                  height: 200,
+                                  child: SingleChildScrollView(
+                                    scrollDirection: Axis.vertical,
+                                    child: Text(
+                                      descr,
+                                      style: const TextStyle(color: Colors.white),
+                                    ),
+                                  )),
+                            )
+                          ],
+                        )
+                      ],
                     ),
-                  ),
-                ],
+                    Container(
+                      child: EpisodesWidget(
+                        cover: cover,
+                        episodes: _episodes,
+                        movieId: widget.id,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ));
@@ -129,5 +134,10 @@ class _EpisodePageState extends State<EpisodePage> {
                   valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                   backgroundColor: Colors.black)));
     }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }

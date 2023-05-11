@@ -19,7 +19,7 @@ class EpisodesWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.builder(
       shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
+      primary: false,
       itemCount: episodes.length,
       itemBuilder: (context, index) {
         final episode = episodes[index];
@@ -40,15 +40,37 @@ class EpisodesWidget extends StatelessWidget {
               Container(
                 width: MediaQuery.of(context).size.width - 50,
                 child: Row(
-                  children: [Padding(padding: EdgeInsets.only(left: 0), child: SizedBox(child: Image.network(episode.image), height: 90)), Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: SizedBox(child: Text(episode.title, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)), width: 180,),
-                  )],
+                  children: [
+                    Padding(
+                        padding: EdgeInsets.only(left: 0),
+                        child: SizedBox(
+                            child: CachedNetworkImage(
+                              imageUrl: episode.image,
+                              progressIndicatorBuilder: (context, url, progress) => SizedBox(child: Center(child: CircularProgressIndicator(color: Colors.white))),
+                            ),
+                            height: 90)),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: SizedBox(
+                        child: Text(episode.title,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold)),
+                        width: 180,
+                      ),
+                    )
+                  ],
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(bottom: 12.0, top: 8.0),
-                child: SizedBox(child: Text(episode.description, style: TextStyle(color: Colors.white, fontSize: 13), softWrap: false, overflow: TextOverflow.ellipsis), width: MediaQuery.of(context).size.width, height: 20),
+                child: SizedBox(
+                    child: Text(episode.description,
+                        style: TextStyle(color: Colors.white, fontSize: 13),
+                        softWrap: false,
+                        overflow: TextOverflow.ellipsis),
+                    width: MediaQuery.of(context).size.width,
+                    height: 20),
               )
             ]),
           ),

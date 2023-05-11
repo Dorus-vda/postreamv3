@@ -111,7 +111,7 @@ class _TvEpisodePageState extends State<TvEpisodePage> {
                     )
                   ],
                 ),
-                Flexible(
+                Container(
                   child: TvEpisodeWidget(
                     episodes: _episodes,
                     movieId: widget.id,

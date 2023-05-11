@@ -1,10 +1,15 @@
 import 'dart:convert';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:postreamv3/RecentWatch/recentWatchManager.dart';
 import 'package:postreamv3/models/anime.dart';
 import 'package:postreamv3/widgets/Anime/animeWidget.dart';
 import 'package:postreamv3/widgets/searchWidget.dart';
 import 'package:postreamv3/widgets/Anime/trendingWidget.dart';
+
+import '../../RecentWatch/recentAnime';
+import '../../episodePage.dart';
 
 class animeHomePage extends StatefulWidget {
   const animeHomePage({Key? key}) : super(key: key);
@@ -16,6 +21,7 @@ class animeHomePage extends StatefulWidget {
 class _AnimeHomePageState extends State<animeHomePage> {
   List<Anime> _animes = <Anime>[];
   String searchTitle = "naruto";
+  List<RecentAnime> animeList = <RecentAnime>[];
 
   ShapeBorder? bottomBarShape = const RoundedRectangleBorder(
       borderRadius: BorderRadius.all(Radius.circular(25)));
@@ -23,16 +29,13 @@ class _AnimeHomePageState extends State<animeHomePage> {
   @override
   void initState() {
     super.initState();
-    _populateAnimes();
+    loadAnimeDatabase();
   }
 
-  void _populateAnimes() async {
-    final animes = await _fetchAnimes();
-    setState(() {
-      _animes = animes;
-    });
+  void loadAnimeDatabase() async {
+    animeList = await RecentWatchManager().loadRecentAnimeFromDatabase();
+    setState(() {});
   }
-
   Future<List<Anime>> _fetchAnimes() async {
     final response = await http
         .get(Uri.parse("https://api.consumet.org/meta/anilist/$searchTitle"));
@@ -65,67 +68,134 @@ class _AnimeHomePageState extends State<animeHomePage> {
   @override
   Widget build(BuildContext context) {
     return Material(
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        backgroundColor: Colors.black,
-        extendBody: true,
-        appBar: AppBar(
-          backgroundColor: const Color.fromARGB(255, 38, 38, 38),
-          title: TextField(
-            controller: searchController,
-            decoration: const InputDecoration(
-              hintText: 'Enter a title',
-              hintStyle: TextStyle(color: Colors.grey),
+      child: GestureDetector(
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          backgroundColor: Colors.black,
+          extendBody: true,
+          appBar: AppBar(
+            backgroundColor: const Color.fromARGB(255, 38, 38, 38),
+            title: TextField(
+              controller: searchController,
+              decoration: const InputDecoration(
+                hintText: 'Enter a title',
+                hintStyle: TextStyle(color: Colors.grey),
+              ),
+              style: const TextStyle(color: Colors.white),
             ),
-            style: const TextStyle(color: Colors.white),
-          ),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.search),
-              onPressed: () {
-                _searchAnimes();
-              },
-            ),
-          ],
-        ),
-        body: SingleChildScrollView(
-          physics: NeverScrollableScrollPhysics(),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Padding(
-                padding: EdgeInsets.only(left: 12, top: 12, bottom: 12),
-                child: Text(
-                  "Popular",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    fontSize: 20,
-                  ),
-                ),
-              ),
-              SizedBox(
-                child: TrendingAnime(keyword: "popular?&perPage=20"),
-                height: 200,
-              ),
-              const Padding(
-                padding: EdgeInsets.only(left: 12, top: 12, bottom: 12),
-                child: Text(
-                  "Trending",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    fontSize: 20,
-                  ),
-                ),
-              ),
-              SizedBox(
-                child: TrendingAnime(keyword: "trending?&perPage=20"),
-                height: 200,
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.search),
+                onPressed: () {
+                  FocusScope.of(context).requestFocus(new FocusNode());
+                  _searchAnimes();
+                },
               ),
             ],
           ),
+          body: SingleChildScrollView(
+            physics: NeverScrollableScrollPhysics(),
+            primary: false,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(left: 12, top: 12, bottom: 12),
+                  child: Text(
+                    "Popular",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  child: TrendingAnime(keyword: "popular?&perPage=20"),
+                  height: 200,
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(left: 12, top: 12, bottom: 12),
+                  child: Text(
+                    "Trending",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  child: TrendingAnime(keyword: "trending?&perPage=20"),
+                  height: 200,
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(left: 12, top: 12, bottom: 12),
+                  child: Text(
+                    "Recently Watched",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 200,
+                  child: ValueListenableBuilder(
+                    valueListenable: RecentWatchManager().updater,
+                    builder: (context, value, child) {
+                    loadAnimeDatabase();
+                    return ListView.builder(
+                      itemCount: animeList.length < 10 ? animeList.length: 10,
+                      
+                      physics: const BouncingScrollPhysics(),
+                      padding: EdgeInsets.zero,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        final anime = animeList[index];
+                        return Container(
+                          key: UniqueKey(),
+                          width: 150,
+                          height: 200,
+                          child: ListTile(
+                            title: Column(
+                              children: [
+                                SizedBox(
+                                  height: 150,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                                    child: CachedNetworkImage(imageUrl: anime.imageUrl, progressIndicatorBuilder: (context, url, progress) => SizedBox(child: Center(child: CircularProgressIndicator(color: Colors.white)), height: 20,),),
+                                  ),
+                                ),
+                                Container(
+                                  child: Padding(
+                                    padding: EdgeInsets.all(4.0),
+                                    child: Container(
+                                      child: Text(
+                                        anime.name,
+                                        style: TextStyle(fontSize: 14, color: Colors.white),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                    }
+                  ),
+                )
+              ],
+            ),
+          ),
         ),
+        onTap: () {
+          FocusScope.of(context).requestFocus(new FocusNode());
+        },
       ),
     );
   }

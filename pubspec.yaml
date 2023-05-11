@@ -43,6 +43,7 @@ dependencies:
   flashy_tab_bar2: ^0.0.5
   persistent_bottom_nav_bar: any
   cached_network_image: ^3.2.3
+  get:
   better_player:
     git:
       url: https://github.com/matthewrice345/betterplayer.git

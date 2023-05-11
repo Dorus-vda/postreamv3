@@ -10,6 +10,6 @@ class Movie {
   Movie({required this.id, required this.title, required this.image, required this.type, required this.description});
 
   factory Movie.fromJson(Map<String, dynamic> json) {
-    return Movie(id: json["id"], title: json["title"] ?? 'no title available', image: json["image"] ?? '', type: json['type'] ?? '', description: json["description"]);
+    return Movie(id: json["id"], title: json["title"] ?? 'no title available', image: json["image"] ?? '', type: json['type'] ?? '', description: json["description"] ?? '');
   }
 }
