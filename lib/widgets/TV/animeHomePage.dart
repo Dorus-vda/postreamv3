@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:postreamv3/RecentWatch/recentShow.dart';
 import 'package:postreamv3/RecentWatch/recentWatchManager.dart';
 import 'package:postreamv3/models/anime.dart';
 import 'package:postreamv3/widgets/Anime/animeWidget.dart';
@@ -10,6 +12,7 @@ import 'package:postreamv3/widgets/Anime/trendingWidget.dart';
 
 import '../../RecentWatch/recentAnime';
 import '../../episodePage.dart';
+import '../videoPlayer.dart';
 
 class animeHomePage extends StatefulWidget {
   const animeHomePage({Key? key}) : super(key: key);
@@ -36,6 +39,7 @@ class _AnimeHomePageState extends State<animeHomePage> {
     animeList = await RecentWatchManager().loadRecentAnimeFromDatabase();
     setState(() {});
   }
+
   Future<List<Anime>> _fetchAnimes() async {
     final response = await http
         .get(Uri.parse("https://api.consumet.org/meta/anilist/$searchTitle"));
@@ -143,51 +147,80 @@ class _AnimeHomePageState extends State<animeHomePage> {
                 SizedBox(
                   height: 200,
                   child: ValueListenableBuilder(
-                    valueListenable: RecentWatchManager().updater,
-                    builder: (context, value, child) {
-                    loadAnimeDatabase();
-                    return ListView.builder(
-                      itemCount: animeList.length < 10 ? animeList.length: 10,
-                      
-                      physics: const BouncingScrollPhysics(),
-                      padding: EdgeInsets.zero,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) {
-                        final anime = animeList[index];
-                        return Container(
-                          key: UniqueKey(),
-                          width: 150,
-                          height: 200,
-                          child: ListTile(
-                            title: Column(
-                              children: [
-                                SizedBox(
-                                  height: 150,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                                    child: CachedNetworkImage(imageUrl: anime.imageUrl, progressIndicatorBuilder: (context, url, progress) => SizedBox(child: Center(child: CircularProgressIndicator(color: Colors.white)), height: 20,),),
-                                  ),
-                                ),
-                                Container(
-                                  child: Padding(
-                                    padding: EdgeInsets.all(4.0),
-                                    child: Container(
-                                      child: Text(
-                                        anime.name,
-                                        style: TextStyle(fontSize: 14, color: Colors.white),
-                                        overflow: TextOverflow.ellipsis,
+                      valueListenable: RecentWatchManager().updater,
+                      builder: (context, value, child) {
+                        loadAnimeDatabase();
+                        return ListView.builder(
+                          itemCount:
+                              animeList.length < 10 ? animeList.length : 10,
+                          physics: const BouncingScrollPhysics(),
+                          padding: EdgeInsets.zero,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            final anime = animeList[index];
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => VideoPlayer(
+                                            episodeId: anime.epUrl,
+                                            movieId: anime.id,
+                                            isAnime: true,
+                                          )),
+                                );
+                                HapticFeedback.lightImpact();
+                              },
+                              onLongPress: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => EpisodePage(
+                                          id: anime.id, image: anime.imageUrl)),
+                                );
+                                HapticFeedback.mediumImpact();
+                              },
+                              child: Container(
+                                key: UniqueKey(),
+                                width: 150,
+                                height: 200,
+                                child: ListTile(
+                                  title: Column(
+                                    children: [
+                                      SizedBox(
+                                        height: 150,
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10)),
+                                          child: Image.network(
+                                            anime.imageUrl,
+                                            scale: 0.2,
+                                            filterQuality: FilterQuality.none,
+                                          ),
+                                        ),
                                       ),
-                                    ),
+                                      Container(
+                                        child: Padding(
+                                          padding: EdgeInsets.all(4.0),
+                                          child: Container(
+                                            child: Text(
+                                              "Episode: ${(int.parse(anime.currentEp) - 1)}",
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: Colors.white),
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ],
-                            ),
-                          ),
+                              ),
+                            );
+                          },
                         );
-                      },
-                    );
-                    }
-                  ),
+                      }),
                 )
               ],
             ),

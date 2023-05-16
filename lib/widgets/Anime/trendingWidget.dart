@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:postreamv3/models/anime.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -49,20 +50,20 @@ class trendingAnimeListtate extends State<TrendingAnime> {
     return ListView.builder(
       physics: const BouncingScrollPhysics(),
       padding: EdgeInsets.zero,
+      shrinkWrap: false,
       scrollDirection: Axis.horizontal,
       itemCount: trendingAnimeList.length,
       itemBuilder: (context, index) {
         final anime = trendingAnimeList[index];
         if (anime.title != null && anime.image != null){
           return GestureDetector(
-            onTap: () async {
+            onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) => EpisodePage(id: anime.id, image: anime.image)),
               );
-              final recentAnime = RecentAnime(currentEp: '2', epUrl: 'shingeki-no-kyojin-episode-2', id: anime.id, name: anime.title, imageUrl: anime.image);
-              RecentWatchManager().addAnimeToRecent(recentAnime, await RecentWatchManager().loadRecentAnimeFromDatabase());
+              HapticFeedback.lightImpact();
               print("TAPPED");
             },
             behavior: HitTestBehavior.translucent,
@@ -77,7 +78,7 @@ class trendingAnimeListtate extends State<TrendingAnime> {
                       height: 150,
                       child: ClipRRect(
                         borderRadius: BorderRadius.all(Radius.circular(10)),
-                        child: CachedNetworkImage(imageUrl: anime.image, progressIndicatorBuilder: (context, url, progress) => SizedBox(child: Center(child: CircularProgressIndicator(color: Colors.white)), height: 20,),),
+                        child: Image(image: NetworkImage(anime.image), filterQuality: FilterQuality.none,)
                       ),
                     ),
                     Flexible(

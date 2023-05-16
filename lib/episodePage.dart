@@ -2,11 +2,14 @@ import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:postreamv3/RecentWatch/recentWatchManager.dart';
 import 'package:postreamv3/models/episode.dart';
 import 'package:postreamv3/models/movie.dart';
 import 'package:postreamv3/noScrollGlow.dart';
 import 'package:postreamv3/widgets/episodeWidget.dart';
 import 'package:postreamv3/widgets/video_items.dart';
+
+import 'RecentWatch/recentAnime';
 
 class EpisodePage extends StatefulWidget {
   const EpisodePage({super.key, required this.id, required this.image});
@@ -19,9 +22,11 @@ class EpisodePage extends StatefulWidget {
 
 class _EpisodePageState extends State<EpisodePage> {
   List<Episode> _episodes = <Episode>[];
-  String cover = '';
+  String image = '';
   String title = '';
   String descr = '';
+  late List<RecentAnime> _recentEpisodeList;
+  int recentAnimeIndex = 0;
 
   @override
   void initState() {
@@ -31,7 +36,14 @@ class _EpisodePageState extends State<EpisodePage> {
 
   void _populateMovies() async {
     final episodes = await _fetchEpisodes();
+    final recentEpisodeList = await RecentWatchManager().loadRecentAnimeFromDatabase();
     setState(() {
+      for(var an in recentEpisodeList){
+        if(an.id == widget.id){
+          recentAnimeIndex = int.parse(an.currentEp);
+          break;
+        }
+      }
       _episodes = episodes;
     });
   }
@@ -43,7 +55,7 @@ class _EpisodePageState extends State<EpisodePage> {
 
     if (response.statusCode == 200) {
       final result = jsonDecode(response.body);
-      cover = result["cover"];
+      image = result["image"];
       title = result["title"]['english'] ?? "no title available";
       descr = result["description"];
       descr = descr.replaceAll(RegExp('\\<.*?\\>'), '');
@@ -58,7 +70,7 @@ class _EpisodePageState extends State<EpisodePage> {
 
   @override
   Widget build(BuildContext context) {
-    if (cover != '') {
+    if (image != '') {
       return MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Postream',
@@ -116,7 +128,8 @@ class _EpisodePageState extends State<EpisodePage> {
                     ),
                     Container(
                       child: EpisodesWidget(
-                        cover: cover,
+                        recentEpisode: recentAnimeIndex,
+                        cover: image,
                         episodes: _episodes,
                         movieId: widget.id,
                       ),
