@@ -86,6 +86,9 @@ class _AnimeHomePageState extends State<animeHomePage> {
                 hintStyle: TextStyle(color: Colors.grey),
               ),
               style: const TextStyle(color: Colors.white),
+              onSubmitted: (value) {
+                _searchAnimes();
+              },
             ),
             actions: [
               IconButton(
@@ -186,7 +189,9 @@ class _AnimeHomePageState extends State<animeHomePage> {
                                   title: Column(
                                     children: [
                                       SizedBox(
-                                        height: MediaQuery.of(context).size.height / 6,
+                                        height:
+                                            MediaQuery.of(context).size.height /
+                                                6,
                                         child: ClipRRect(
                                           borderRadius: BorderRadius.all(
                                               Radius.circular(10)),
