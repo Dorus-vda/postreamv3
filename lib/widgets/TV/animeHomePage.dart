@@ -98,8 +98,6 @@ class _AnimeHomePageState extends State<animeHomePage> {
             ],
           ),
           body: SingleChildScrollView(
-            physics: NeverScrollableScrollPhysics(),
-            primary: false,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -116,7 +114,7 @@ class _AnimeHomePageState extends State<animeHomePage> {
                 ),
                 SizedBox(
                   child: TrendingAnime(keyword: "popular?&perPage=20"),
-                  height: 200,
+                  height: MediaQuery.of(context).size.height / 5,
                 ),
                 const Padding(
                   padding: EdgeInsets.only(left: 12, top: 12, bottom: 12),
@@ -131,7 +129,7 @@ class _AnimeHomePageState extends State<animeHomePage> {
                 ),
                 SizedBox(
                   child: TrendingAnime(keyword: "trending?&perPage=20"),
-                  height: 200,
+                  height: MediaQuery.of(context).size.height / 5,
                 ),
                 const Padding(
                   padding: EdgeInsets.only(left: 12, top: 12, bottom: 12),
@@ -145,7 +143,7 @@ class _AnimeHomePageState extends State<animeHomePage> {
                   ),
                 ),
                 SizedBox(
-                  height: 200,
+                  height: MediaQuery.of(context).size.height / 5,
                   child: ValueListenableBuilder(
                       valueListenable: RecentWatchManager().updater,
                       builder: (context, value, child) {
@@ -183,12 +181,12 @@ class _AnimeHomePageState extends State<animeHomePage> {
                               child: Container(
                                 key: UniqueKey(),
                                 width: 150,
-                                height: 200,
+                                height: MediaQuery.of(context).size.height / 5,
                                 child: ListTile(
                                   title: Column(
                                     children: [
                                       SizedBox(
-                                        height: 150,
+                                        height: MediaQuery.of(context).size.height / 6,
                                         child: ClipRRect(
                                           borderRadius: BorderRadius.all(
                                               Radius.circular(10)),

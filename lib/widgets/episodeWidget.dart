@@ -145,15 +145,12 @@ class _EpisodesWidgetState extends State<EpisodesWidget> {
                         width: MediaQuery.of(context).size.width,
                         child: Row(
                           children: [
-                            Padding(
-                              padding: EdgeInsets.only(left: 0),
-                              child: SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.4,
-                                child: Image.network(episode.image),
-                              ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.4,
+                              child: Image.network(episode.image),
                             ),
                             Padding(
-                              padding: const EdgeInsets.only(left: 8.0),
+                              padding: EdgeInsets.only(left: MediaQuery.of(context).size.width / 50),
                               child: SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.5,
                                 child: Text(
@@ -169,9 +166,8 @@ class _EpisodesWidgetState extends State<EpisodesWidget> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(
-                          bottom: 12.0,
-                          top: 8.0,
+                        padding: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.height / 200
                         ),
                         child: SizedBox(
                           width: MediaQuery.of(context).size.width,

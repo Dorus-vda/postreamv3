@@ -43,9 +43,12 @@ class _MovieAppState extends State<MovieApp> {
       title: 'Postream',
       home: Scaffold(
         extendBody: true,
-        body: IndexedStack(
-          index: _selectedIndex,
-          children: pageList,
+        body: Padding(
+          padding: EdgeInsets.only(bottom: 55),
+          child: IndexedStack(
+            index: _selectedIndex,
+            children: pageList,
+          ),
         ),
         bottomNavigationBar: FlashyTabBar(
           height: 55,

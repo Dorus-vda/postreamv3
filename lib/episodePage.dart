@@ -91,7 +91,7 @@ class _EpisodePageState extends State<EpisodePage> {
                     Row(
                       children: [
                         Container(
-                          width: 150,
+                          width: MediaQuery.of(context).size.width / 3,
                           child: CachedNetworkImage(imageUrl: widget.image),
                         ),
                         Column(
@@ -99,7 +99,7 @@ class _EpisodePageState extends State<EpisodePage> {
                             Padding(
                               padding: const EdgeInsets.only(left: 8.0, bottom: 4.0),
                               child: SizedBox(
-                                width: MediaQuery.of(context).size.width - 158,
+                                width: MediaQuery.of(context).size.width / 2,
                                 child: Text(
                                   title,
                                   style: const TextStyle(
