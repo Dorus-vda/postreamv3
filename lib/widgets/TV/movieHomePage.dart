@@ -36,7 +36,7 @@ class _movieHomePageState extends State<movieHomePage> {
 
   Future<List<Movie>> _fetchMovies() async {
     final response =
-        await http.get(Uri.parse("https://api.consumet.org/meta/tmdb/$search_title"));
+        await http.get(Uri.parse("https://consumet-api-yeqo.onrender.com/meta/tmdb/$search_title"));
 
     if (response.statusCode == 200) {
       final result = jsonDecode(response.body);

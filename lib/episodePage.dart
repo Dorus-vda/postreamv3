@@ -50,7 +50,7 @@ class _EpisodePageState extends State<EpisodePage> {
 
   Future<List<Episode>> _fetchEpisodes() async {
     final response = await http
-        .get(Uri.parse("https://api.consumet.org/meta/anilist/info/${widget.id}"));
+        .get(Uri.parse("https://consumet-api-yeqo.onrender.com/meta/anilist/info/${widget.id}"));
     //await http.get("http://api.consumet.org/anime/gogoanime/$search_title");
 
     if (response.statusCode == 200) {
@@ -130,7 +130,7 @@ class _EpisodePageState extends State<EpisodePage> {
                       child: EpisodesWidget(
                         recentEpisode: recentAnimeIndex,
                         cover: image,
-                        episodes: _episodes,
+                        episodes: _episodes.reversed.toList(),
                         movieId: widget.id,
                       ),
                     ),

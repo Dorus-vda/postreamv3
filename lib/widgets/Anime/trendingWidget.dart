@@ -33,7 +33,7 @@ class trendingAnimeListtate extends State<TrendingAnime> {
 
   Future<void> _fetchTrendingAnimes() async {
     final response =
-        await http.get(Uri.parse("https://api.consumet.org/meta/anilist/${widget.keyword}"));
+        await http.get(Uri.parse("https://consumet-api-yeqo.onrender.com/meta/anilist/${widget.keyword}"));
     if (response.statusCode == 200) {
       final result = jsonDecode(response.body);
       Iterable list = result["results"];

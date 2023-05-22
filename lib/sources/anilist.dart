@@ -11,7 +11,7 @@ class anilist {
 
   Future<String> getEpisodeId() async {
       final response2 = await http.get(Uri.parse(
-          'https://api.consumet.org/meta/anilist/watch/$id'));
+          'https://consumet-api-yeqo.onrender.com/meta/anilist/watch/$id'));
       if (response2.statusCode == 200) {
         Map<String, dynamic> body2 = json.decode(response2.body);
         List<dynamic> sources = body2['sources'];

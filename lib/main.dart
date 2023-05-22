@@ -42,6 +42,7 @@ class _MovieAppState extends State<MovieApp> {
       debugShowCheckedModeBanner: false,
       title: 'Postream',
       home: Scaffold(
+        resizeToAvoidBottomInset: false,
         extendBody: true,
         body: Padding(
           padding: EdgeInsets.only(bottom: 55),

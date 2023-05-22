@@ -12,10 +12,9 @@ class tmdb {
   Future<List> getEpisodeId() async {
     String? en_subtitle;
     String? nl_subtitle;
-
-    print('https://api.consumet.org/meta/tmdb/watch/$id?id=${movieId}');
+    
     final response2 = await http.get(Uri.parse(
-        'https://api.consumet.org/meta/tmdb/watch/$id?id=${movieId}'));
+        'https://consumet-api-yeqo.onrender.com/meta/tmdb/watch/$id?id=${movieId}'));
     if (response2.statusCode == 200) {
       Map<String, dynamic> body2 = json.decode(response2.body);
       List<dynamic> sources = body2['sources'];

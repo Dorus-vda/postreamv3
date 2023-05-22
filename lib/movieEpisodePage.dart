@@ -41,7 +41,7 @@ class _movieEpisodePageState extends State<movieEpisodePage> {
 
   Future _fetchEpisodes() async {
     final response = await http
-        .get(Uri.parse("https://api.consumet.org/meta/tmdb/info/${widget.id}?type=${widget.type}"));
+        .get(Uri.parse("https://consumet-api-yeqo.onrender.com/meta/tmdb/info/${widget.id}?type=${widget.type}"));
     //await http.get("http://api.consumet.org/anime/gogoanime/$search_title");
 
     if (response.statusCode == 200) {

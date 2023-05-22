@@ -42,7 +42,7 @@ class _AnimeHomePageState extends State<animeHomePage> {
 
   Future<List<Anime>> _fetchAnimes() async {
     final response = await http
-        .get(Uri.parse("https://api.consumet.org/meta/anilist/$searchTitle"));
+        .get(Uri.parse("https://consumet-api-yeqo.onrender.com/meta/anilist/$searchTitle"));
 
     if (response.statusCode == 200) {
       final result = jsonDecode(response.body);
@@ -86,9 +86,6 @@ class _AnimeHomePageState extends State<animeHomePage> {
                 hintStyle: TextStyle(color: Colors.grey),
               ),
               style: const TextStyle(color: Colors.white),
-              onSubmitted: (value) {
-                _searchAnimes();
-              },
             ),
             actions: [
               IconButton(
@@ -130,9 +127,9 @@ class _AnimeHomePageState extends State<animeHomePage> {
                     ),
                   ),
                 ),
-                SizedBox(
+                Container(
                   child: TrendingAnime(keyword: "trending?&perPage=20"),
-                  height: MediaQuery.of(context).size.height / 5,
+                  height: MediaQuery.of(context).size.height / 4.5,
                 ),
                 const Padding(
                   padding: EdgeInsets.only(left: 12, top: 12, bottom: 12),
@@ -146,7 +143,7 @@ class _AnimeHomePageState extends State<animeHomePage> {
                   ),
                 ),
                 SizedBox(
-                  height: MediaQuery.of(context).size.height / 5,
+                  height: MediaQuery.of(context).size.height / 4.5,
                   child: ValueListenableBuilder(
                       valueListenable: RecentWatchManager().updater,
                       builder: (context, value, child) {
@@ -189,9 +186,7 @@ class _AnimeHomePageState extends State<animeHomePage> {
                                   title: Column(
                                     children: [
                                       SizedBox(
-                                        height:
-                                            MediaQuery.of(context).size.height /
-                                                6,
+                                        height: MediaQuery.of(context).size.height / 6,
                                         child: ClipRRect(
                                           borderRadius: BorderRadius.all(
                                               Radius.circular(10)),
